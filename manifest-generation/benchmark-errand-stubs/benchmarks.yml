@@ -11,10 +11,10 @@ releases:
 
 diego_z1_network_cloud_properties: (( merge ))
 
-networks: 
+networks:
 - name: benchmarks1
-  type: dynamic 
-  cloud_properties: (( diego_z1_network_cloud_properties ))
+  type: manual
+  subnets: (( iaas_settings.subnet_config.benchmarks1.subnets ))
 
 resource_pools:
 
