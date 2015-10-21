@@ -134,7 +134,7 @@ from the root of diego-release to run the integration tests.
 
 ###<a name="smokes-and-dats"></a> Running Smoke Tests & DATs
 
-You can test that your diego-release deployment is working and integrating with cf-release by running the lightweight [diego-smoke-tests](https://github.com/cloudfoundry-incubator/diego-smoke-tests) or the more thorough [diego-acceptance-tests](https://github.com/cloudfoundry-incubator/diego-acceptance-tests). These test suites assume you have a BOSH environment to deploy cf and diego to. For local development, bosh-lite is an easy way to have a single-VM deployment. To deploy diego to bosh-lite, follow the instructions on [deploying diego to bosh-lite](#TODO).
+You can test that your diego-release deployment is working and integrating with cf-release by running the lightweight [diego-smoke-tests](https://github.com/cloudfoundry-incubator/diego-smoke-tests) or the more thorough [diego-acceptance-tests](https://github.com/cloudfoundry-incubator/diego-acceptance-tests). These test suites assume you have a BOSH environment to deploy cf and diego to. For local development, bosh-lite is an easy way to have a single-VM deployment. To deploy diego to bosh-lite, follow the instructions on [deploying diego to bosh-lite](README.md#deploy-bosh-lite).
 
 The instructions below assume you're using bosh-lite and have generated the manifests with the `scripts/generate-bosh-lite-manifests` script. This script will also generate manifests for the errands that run these test suites. If you did not run that script or are running tests in a different environment, substitute the relevant manifest files in the `bosh deploy` commands below.
 
