@@ -14,7 +14,7 @@ come from [cf-release](https://github.com/cloudfoundry/cf-release).
 
 ### Additional Diego Resources
 
-  - The [Contribution Guidelines](TODO!) describes the developer workflow for making changes to Diego.
+  - The [Contribution Guidelines](CONTRIBUTING.md) describes the developer workflow for making changes to Diego.
   - The [Diego Design Notes](https://github.com/cloudfoundry-incubator/diego-design-notes) present an overview of Diego, and links to the various Diego components.
   - The [Migration Guide](https://github.com/cloudfoundry-incubator/diego-design-notes/blob/master/migrating-to-diego.md) describes how developers and operators can manage a transition from the DEAs to Diego.
   - The [Docker Support Notes](https://github.com/cloudfoundry-incubator/diego-design-notes/blob/master/docker-support.md) describe how Diego runs Docker-image-based apps in Cloud Foundry.
