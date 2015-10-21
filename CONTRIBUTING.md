@@ -168,7 +168,10 @@ Running the benchmark tests isn't usually needed for most changes. However, for 
 
 1. Generate a benchmark deployment manifest using:
  
-        ./scripts/generate-benchmarks-manifest /path/to/diego.yml /path/to/benchmark-properties.yml > benchmark.yml
+        ./scripts/generate-benchmarks-manifest \
+          /path/to/diego.yml \
+          /path/to/benchmark-properties.yml \
+          > benchmark.yml
 
 1. Deploy and run the tests using:
  
