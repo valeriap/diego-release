@@ -40,7 +40,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/executor"]
 	path = src/github.com/cloudfoundry-incubator/executor
 	url = https://github.com/cloudfoundry-incubator/executor
-	branch = master
+	branch = wip-garden-test
 [submodule "src/github.com/cloudfoundry-incubator/stager"]
 	path = src/github.com/cloudfoundry-incubator/stager
 	url = https://github.com/cloudfoundry-incubator/stager
@@ -52,7 +52,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/rep"]
 	path = src/github.com/cloudfoundry-incubator/rep
 	url = https://github.com/cloudfoundry-incubator/rep
-	branch = master
+	branch = wip-garden-test
 [submodule "src/github.com/cloudfoundry-incubator/candiedyaml"]
 	path = src/github.com/cloudfoundry-incubator/candiedyaml
 	url = https://github.com/cloudfoundry-incubator/candiedyaml
@@ -88,7 +88,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/inigo"]
 	path = src/github.com/cloudfoundry-incubator/inigo
 	url = https://github.com/cloudfoundry-incubator/inigo
-	branch = master
+	branch = wip-garden-test
 [submodule "src/github.com/GaryBoone/GoStats"]
 	path = src/github.com/GaryBoone/GoStats
 	url = https://github.com/GaryBoone/GoStats
