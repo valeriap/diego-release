@@ -170,7 +170,7 @@
 	branch = master
 [submodule "src/github.com/cloudfoundry-incubator/cf_http"]
 	path = src/github.com/cloudfoundry-incubator/cf_http
-	url = https://github.com/cloudfoundry-incubator/cf_http
+	url = git@github.com:cloudfoundry-incubator/cf_http.git
 	branch = master
 [submodule "src/github.com/pivotal-golang/clock"]
 	path = src/github.com/pivotal-golang/clock
@@ -320,3 +320,9 @@
 [submodule "src/github.com/pkg/sftp"]
 	path = src/github.com/pkg/sftp
 	url = https://github.com/pkg/sftp
+[submodule "src/github.com/errors"]
+	path = src/github.com/errors
+	url = https://github.com/go-errors/errors.git
+[submodule "src/github.com/cloudfoundry-incubator/volman"]
+	path = src/github.com/cloudfoundry-incubator/volman
+	url = https://github.com/cloudfoundry-incubator/volman.git
