@@ -187,6 +187,8 @@ or the
 These instructions assume that AWS has been configured with a Cloud Foundry
 deployed using [these instructions](https://github.com/cloudfoundry-incubator/diego-ci).
 
+When setting up AWS with [these](https://github.com/cloudfoundry-incubator/diego-ci/blob/master/README.md#aws-requirements) instructions, `$DEPLOYMENT_DIR` was created.
+
 **All the following commands it is assumed are run from this repository.**
 
 ### Strip CF yaml to a diego-cf-yml
