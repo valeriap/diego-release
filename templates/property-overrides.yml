@@ -1,0 +1,74 @@
+property_overrides:
+  bbs:
+    active_key_label: ACTIVE_KEY_LABEL
+    encryption_keys:
+      - label: ACTIVE_KEY_LABEL
+        passphrase: "A SECURE PASSPHRASE"
+    # require_ssl: false
+
+    # If require_ssl is set to false, the following certs and keys must be set
+    # to nil.
+    ca_cert: |
+      BBS_CA_CERT
+    client_cert: |
+      BBS_CLIENT_CERT
+    client_key: |
+      BBS_CLIENT_KEY
+    server_cert: |
+      BBS_SERVER_CERT
+    server_key: |
+      BBS_SERVER_KEY
+    log_level: debug
+  etcd:
+    heartbeat_interval_in_milliseconds: 200
+    election_timeout_in_milliseconds: 2000
+    require_ssl: true
+    peer_require_ssl: true
+    # if require_ssl and peer_require_ssl are set to false, the following certs
+    # and keys must be set to nil.
+    ca_cert: |
+      ETCD_CA_CERT
+    server_cert: |
+      ETCD_SERVER_CERT
+    server_key: |
+      ETCD_SERVER_KEY
+    client_cert: |
+      ETCD_CLIENT_CERT
+    client_key: |
+      ETCD_CLIENT_KEY
+    peer_ca_cert: |
+      ETCD_PEER_CA_CERT
+    peer_cert: |
+      ETCD_PEER_CERT
+    peer_key: |
+      ETCD_PEER_KEY
+    log_level: debug
+  nsync:
+    log_level: debug
+  converger:
+    log_level: debug
+  auctioneer:
+    log_level: debug
+  cc_uploader:
+    log_level: debug
+  file_server:
+    log_level: debug
+  executor:
+    log_level: debug
+  tps:
+    log_level: debug
+  route_emitter:
+    log_level: debug
+  stager:
+    log_level: debug
+  rep:
+    log_level: debug
+  garden:
+    # allow_networks: ["10.10.0.2/32"]  # ?? what
+    log_level: debug
+  skip_cert_verify: true
+  ssh_proxy:
+    enable_cf_auth: true
+    enable_diego_auth: true
+    host_key: |
+      SSH_PROXY_HOST_KEY

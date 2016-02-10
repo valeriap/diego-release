@@ -1,0 +1,9 @@
+instance_count_overrides:
+  - name: cell_z1
+    instances: 3
+  - name: cell_z2
+    instances: 3
+  - name: database_z2
+    instances: 1
+  - name: database_z3
+    instances: 1
