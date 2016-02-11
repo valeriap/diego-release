@@ -186,7 +186,7 @@ or the
 
 ---
 
-##<a name="deploy-diego-to-aws"></a> Deploying Diego to AWS
+##<a name="deploying-diego-to-aws"></a>Deploying Diego to AWS
 
 These instructions assume that AWS has been configured with a Cloud Foundry
 deployed using [these instructions](https://github.com/cloudfoundry-incubator/diego-ci). In those instructions, [when setting up AWS](https://github.com/cloudfoundry-incubator/diego-ci/blob/master/README.md#aws-requirements), `$DEPLOYMENT_DIR` was set. This variable must be set to continue.
