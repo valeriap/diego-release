@@ -201,12 +201,13 @@ spiff merge manifest-generation/config-from-cf.yml \
 
 ### Generate iaas-settings stub
 
-1. Copy the example iaas-settings-internal.yml to the correct location.
+Copy the example iaas-settings-internal.yml to the correct location.
+
 ```
 cp manifest-generation/examples/aws/iaas-settings-internal.yml $DEPLOYMENT_DIR/templates/diego
 ```
 
-1. Optional: Edit this file to add overrides for the default disks for the database VMs. For example:
+Optional: Edit this file to add overrides for the default disks for the database VMs. For example:
 ```
 iaas_settings:
   disk_pools:
@@ -215,8 +216,7 @@ iaas_settings:
     cloud_properties: {type: gp2}
 ```
 
-
-1. The following command will now generate the correct iaas-settings stub.
+The following command will now generate the correct iaas-settings stub.
 ```
 spiff merge manifest-generation/misc-templates/aws-iaas-settings.yml \
             $DEPLOYMENT_DIR/templates/diego/iaas-settings-internal.yml \
@@ -227,30 +227,34 @@ spiff merge manifest-generation/misc-templates/aws-iaas-settings.yml \
 
 ### Generate property-overrides stub
 
-You will need to create a stub for diego's private properties. A default template is provided at `./templates/property-overrides.yml` and should be
-copied to `DEPLOYMENT_DIR/stubs/diego/property-overrides.yml` before editing the necessary keys.
+The `property-overrides.yml` is a stub for diego's private properties. Copy the example to the correct location.
 
 ```
 cp templates/property-overrides.yml $DEPLOYMENT_DIR/stubs/diego/property-overrides.yml
 ```
+Edit the following keys:
 
   * ACTIVE_KEY_LABEL: can be replaced with any desired key name
   * "A SECURE PASSPHRASE": should be a unique passphrase
-  ALL THE CERTS. If you need to generate them, see below **LINK**
-
+  * ALL THE CERTS: if you need to generate them, [see below](#user-content-generating-tls-certificates)
 
 ### (Optional) Edit instance-count-overrides stub
-There is an example under `/templates/instance-count-overrides.yml`. Copy this file
-to `$DEPLOYMENT_DIR/stubs/diego/instance-count-overrides.yml`
+
+Copy the example to the correct location.
 ```
 cp ./templates/instance-count-overrides-example.yml $DEPLOYMENT_DIR/stubs/diego/instance-count-overrides.yml
 ```
-and edit it if you want.  The format is job name and instance_count 
-to specify the number of instances of the job to create.
+Edit it if you want to change the number of instances of each of the jobs to create.
 
 ### (Optional) Edit release-versions stub
-There is an example under `/templates/release-versions.yml`. Copy this file
-to `$DEPLOYMENT_DIR/stubs/diego/release-versions.yml` and edit it if you want. The format is ?
+
+Copy the example to the correct location.
+
+```
+cp ./templates/release-versions.yml $DEPLOYMENT_DIR/stubs/diego/release-versions.yml
+```
+
+If you want to edit it, the format is:
 
 ```yml
 release-versions:
