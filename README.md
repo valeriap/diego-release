@@ -238,6 +238,7 @@ cp templates/property-overrides.yml $DEPLOYMENT_DIR/stubs/diego/property-overrid
 
   * ACTIVE_KEY_LABEL: can be replaced with any desired key name
   * "A SECURE PASSPHRASE": should be a unique passphrase
+  ALL THE CERTS. If you need to generate them, see below **LINK**
 
 
 ### (Optional) Edit instance-count-overrides stub
