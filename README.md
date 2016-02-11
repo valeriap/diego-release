@@ -27,6 +27,7 @@ come from [cf-release](https://github.com/cloudfoundry/cf-release).
 ### Table of Contents
 1. [Discovering a Set of Releases to Deploy](#release-compatibility)
 1. [Deploying Diego to BOSH-Lite](#deploying-diego-to-bosh-lite)
+1. [Deploying Diego to AWS](#deploying-diego-to-aws)
 1. [Pushing to Diego](#pushing-to-diego)
 1. [Database Encryption](#database-encryption)
   1. [Configuring Encryption Keys](#configuring-encryption-keys)
@@ -182,12 +183,13 @@ or the
 > the `manifest-generation/bosh-lite-stubs/colocated-instance-count-overrides.yml`
 > stub.
 
-## Deploying Diego to AWS
+
+---
+
+##<a name="deploy-diego-to-aws"></a> Deploying Diego to AWS
 
 These instructions assume that AWS has been configured with a Cloud Foundry
-deployed using [these instructions](https://github.com/cloudfoundry-incubator/diego-ci).
-
-For those instruction, [when setting up AWS](https://github.com/cloudfoundry-incubator/diego-ci/blob/master/README.md#aws-requirements), `$DEPLOYMENT_DIR` was created. This variable is continued to be used in these docs.
+deployed using [these instructions](https://github.com/cloudfoundry-incubator/diego-ci). In those instructions, [when setting up AWS](https://github.com/cloudfoundry-incubator/diego-ci/blob/master/README.md#aws-requirements), `$DEPLOYMENT_DIR` was set. This variable must be set to continue.
 
 **NOTE: All the following commands should be run from this repository.**
 
@@ -202,7 +204,6 @@ spiff merge manifest-generation/config-from-cf.yml \
 ### Generate iaas-settings stub
 
 Copy the example iaas-settings-internal.yml to the correct location.
-
 ```
 cp manifest-generation/examples/aws/iaas-settings-internal.yml $DEPLOYMENT_DIR/templates/diego
 ```
@@ -228,14 +229,14 @@ spiff merge manifest-generation/misc-templates/aws-iaas-settings.yml \
 ### Generate property-overrides stub
 
 The `property-overrides.yml` is a stub for diego's private properties. Copy the example to the correct location.
-
 ```
 cp templates/property-overrides.yml $DEPLOYMENT_DIR/stubs/diego/property-overrides.yml
 ```
+
 Edit the following keys:
 
-  * ACTIVE_KEY_LABEL: can be replaced with any desired key name
-  * "A SECURE PASSPHRASE": should be a unique passphrase
+  * ACTIVE_KEY_LABEL: any desired key name
+  * "A SECURE PASSPHRASE": a unique passphrase
   * ALL THE CERTS: if you need to generate them, [see below](#user-content-generating-tls-certificates)
 
 ### (Optional) Edit instance-count-overrides stub
@@ -249,13 +250,11 @@ Edit it if you want to change the number of instances of each of the jobs to cre
 ### (Optional) Edit release-versions stub
 
 Copy the example to the correct location.
-
 ```
 cp ./templates/release-versions.yml $DEPLOYMENT_DIR/stubs/diego/release-versions.yml
 ```
 
 If you want to edit it, the format is:
-
 ```yml
 release-versions:
   - diego: latest
@@ -264,9 +263,9 @@ release-versions:
 ```
 
 ### Generate the diego manifest
+
 Remember that the last two arguments for `instance-count-overrides` and `release-versions`
 are optional.
-
 ```
 ./scripts/generate-deployment-manifest \
   -c $DEPLOYMENT_DIR/deployments/cf.yml \
@@ -279,20 +278,22 @@ are optional.
 
 ### Upload Garden and ETCD release
 1. Upload the latest garden-linux-release:
+    ```
+    bosh upload release https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release
+    ```
 
-        bosh upload release https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release
-
-  If you wish to upload a specific version of garden-linux-release, or to download the release locally before uploading it, please consult directions at [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-incubator/garden-linux-release).
+    If you wish to upload a specific version of garden-linux-release, or to download the release locally before uploading it, please consult directions at [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-incubator/garden-linux-release).
 
 1. Upload the latest etcd-release:
-
-        bosh upload release https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release
-
-  If you wish to upload a specific version of etcd-release, or to download the release locally before uploading it, please consult directions at [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-incubator/etcd-release).
+    ```
+    bosh upload release https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release
+    ```
+  
+    If you wish to upload a specific version of etcd-release, or to download the release locally before uploading it, please consult directions at [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-incubator/etcd-release).
 
 ### Deploy Diego
 
-These commands may take up to an hour. Please be patient.
+These commands may take up to an hour. Be patient; it's worth it.
 ```
 bosh deployment $DEPLOYMENT_DIR/deployments/diego.yml
 bosh --parallel 10 create release --force
@@ -300,7 +301,8 @@ bosh upload release
 bosh deploy
 ```
 
-### Verify It Worked
+-----------------**v-WIP-v**-----------------
+### Verify it worked
 Login to CF and enable Docker support:
 ```
 cf login -a $YOUR_CF_DOMAIN -u admin -p admin --skip-ssl-validation &&
@@ -316,7 +318,7 @@ If you wish to run all of the diego jobs on a single VM, you can replace the
 the `manifest-generation/bosh-lite-stubs/colocated-instance-count-overrides.yml`
 stub.
 
-
+-----------------**^-WIP-^**-----------------
 
 ---
 ## Pushing a CF Application to the Diego backend
