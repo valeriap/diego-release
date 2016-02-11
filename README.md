@@ -187,11 +187,11 @@ or the
 These instructions assume that AWS has been configured with a Cloud Foundry
 deployed using [these instructions](https://github.com/cloudfoundry-incubator/diego-ci).
 
-When setting up AWS with [these](https://github.com/cloudfoundry-incubator/diego-ci/blob/master/README.md#aws-requirements) instructions, `$DEPLOYMENT_DIR` was created.
+For those instruction, [when setting up AWS](https://github.com/cloudfoundry-incubator/diego-ci/blob/master/README.md#aws-requirements), `$DEPLOYMENT_DIR` was created. This variable is continued to be used in these docs.
 
-**All the following commands it is assumed are run from this repository.**
+**NOTE: All the following commands should be run from this repository.**
 
-### Strip CF yaml to a diego-cf-yml
+### Strip `cf.yml` down for Diego
 ```
 spiff merge manifest-generation/config-from-cf.yml \
             manifest-generation/config-from-cf-internal.yml \
@@ -201,13 +201,12 @@ spiff merge manifest-generation/config-from-cf.yml \
 
 ### Generate iaas-settings stub
 
-A sample `manifest-generation/examples/aws/iass-settings-internal.yml` is provided.
-Copy your file to $DEPLOYMENT_DIR/templates/diego/iaas-settings-internal.yml.
+1. Copy the example iaas-settings-internal.yml to the correct location.
 ```
 cp manifest-generation/examples/aws/iaas-settings-internal.yml $DEPLOYMENT_DIR/templates/diego
 ```
-You can edit it. For example:
 
+1. Optional: Edit this file to add overrides for the default disks for the database VMs. For example:
 ```
 iaas_settings:
   disk_pools:
@@ -215,10 +214,9 @@ iaas_settings:
     disk_size: 200_000
     cloud_properties: {type: gp2}
 ```
-can be added to overide the default disks for the database VMs.
 
 
-The following command will now generate the correct stub.
+1. The following command will now generate the correct iaas-settings stub.
 ```
 spiff merge manifest-generation/misc-templates/aws-iaas-settings.yml \
             $DEPLOYMENT_DIR/templates/diego/iaas-settings-internal.yml \
