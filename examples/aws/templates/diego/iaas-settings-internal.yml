@@ -41,14 +41,20 @@ iaas_settings:
       cloud_properties:
         instance_type: m3.medium
         availability_zone: (( Resources.SubnetAvailabilityZone.DiegoZ1 ))
+        elbs:
+        - (( Resources.LoadBalancer.SSHProxyELB ))
     - name: access_z2
       cloud_properties:
         instance_type: m3.medium
         availability_zone: (( Resources.SubnetAvailabilityZone.DiegoZ2 ))
+        elbs:
+        - (( Resources.LoadBalancer.SSHProxyELB ))
     - name: access_z3
       cloud_properties:
         instance_type: m3.medium
         availability_zone: (( Resources.SubnetAvailabilityZone.DiegoZ3 ))
+        elbs:
+        - (( Resources.LoadBalancer.SSHProxyELB ))
     - name: brain_z1
       cloud_properties:
         instance_type: m3.medium
@@ -129,3 +135,5 @@ Resources:
     DiegoZ3: (( merge ))
   SecurityGroupName:
     Internal: (( merge ))
+  LoadBalancer:
+    SSHProxyELB: (( merge ))

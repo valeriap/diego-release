@@ -69,6 +69,5 @@ property_overrides:
   skip_cert_verify: true
   ssh_proxy:
     enable_cf_auth: true
-    enable_diego_auth: true
     host_key: |
       SSH_PROXY_HOST_KEY
