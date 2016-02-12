@@ -191,15 +191,21 @@ or the
 These instructions assume that AWS has been configured with a Cloud Foundry
 deployed using [these instructions](https://github.com/cloudfoundry-incubator/diego-ci). In those instructions, [when setting up AWS](https://github.com/cloudfoundry-incubator/diego-ci/blob/master/README.md#aws-requirements), `$DEPLOYMENT_DIR` was set. This variable must be set to continue.
 
-**NOTE: All the following commands should be run from this repository.**
+###<a name="generating-ssh-proxy-host-key"></a>"Generating SSH Proxy Host Key and Fingerprint
 
-### Strip `cf.yml` down for Diego
+In order for SSH to work for diego-release, you must generate the SSH Proxy host key and fingerprint.
+This can be done by running:
+
 ```
-spiff merge manifest-generation/config-from-cf.yml \
-            manifest-generation/config-from-cf-internal.yml \
-            $DEPLOYMENT_DIR/deployments/cf.yml \
-            > $DEPLOYMENT_DIR/stubs/diego/cf.yml
+ssh-keygen -f ssh-proxy-host-key.pem
+ssh-keygen -lf ssh-proxy-host-key.pem.pub -E md5
 ```
+
+The `ssh-proxy-host-key.pem` will contain the PEM encoded host key for the diego release manifest.
+
+The md5 host key fingerprint needs to be added to the cf release manifest `cf.yml` under `properties.app_ssh.host_key_fingerprint` before you deploy cf release.
+
+**NOTE: All the following commands should be run from this repository.**
 
 ### Generate iaas-settings stub
 
@@ -222,7 +228,6 @@ The following command will now generate the correct iaas-settings stub.
 spiff merge manifest-generation/misc-templates/aws-iaas-settings.yml \
             $DEPLOYMENT_DIR/templates/diego/iaas-settings-internal.yml \
             $DEPLOYMENT_DIR/stubs/aws-resources.yml \
-            $DEPLOYMENT_DIR/stubs/diego/cf.yml \
             > $DEPLOYMENT_DIR/stubs/diego/iaas-settings.yml
 ```
 
@@ -238,6 +243,7 @@ Edit the following keys:
   * ACTIVE_KEY_LABEL: any desired key name
   * "A SECURE PASSPHRASE": a unique passphrase
   * ALL THE CERTS: if you need to generate them, [see below](#user-content-generating-tls-certificates)
+  * SSH_PROXY_HOST_KEY: this is the [key generated](#generating-ssh-proxy-host-key) earlier in these docs
 
 ### (Optional) Edit instance-count-overrides stub
 
