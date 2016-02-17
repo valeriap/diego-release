@@ -6,7 +6,9 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 function usage() {
   >&2 echo "    Usage:
-    $0 <create|update|skip> <deployment_dir>
+    $0 <create|update|skip> <cloud_foundry_release_dir> <deployment_dir>
+    cloud_foundry_release_dir:
+      Location where the cf-release repository has been download to.
     deployment_dir:
       Private deployment directory containg your keys.
 "
@@ -24,7 +26,8 @@ else
   exit 1
 fi
 
-deployment_dir=$2
+cf_release_dir=$2
+deployment_dir=$3
 
 if [ -z ${deployment_dir} ]; then
   usage
@@ -42,6 +45,7 @@ pushd ${deployment_dir}
 mkdir -p stubs/cf
 mkdir -p stubs/infrastructure
 mkdir -p deployments/bosh-init
+mkdir -p certs/consul
 
 source bootstrap_environment
 
@@ -109,15 +113,45 @@ cat > stubs/director-uuid.yml <<EOF
 director_uuid: $(bosh status --uuid | tr -d '\n')
 EOF
 
+touch stubs/cf/domain.yml
+
+cat > stubs/cf/domain.yml <<EOF
+# GENERATED, NO TOUCHING
+EOF
+
+spiff merge $SCRIPT_DIR/templates/cf/domain.yml \
+  $SCRIPT_DIR/templates/cf/domain-internal.yml \
+  stubs/domain.yml >> stubs/cf/domain.yml
+
 # generate deployment stub
-touch stubs/cf/aws.yml
+touch stubs/cf/stub.yml
+
+cat > stubs/cf/stub.yml <<EOF
+# GENERATED, NO TOUCHING
+EOF
 
 spiff merge \
-  $SCRIPT_DIR/templates/cf/aws.yml \
-  $SCRIPT_DIR/templates/cf/aws-internal.yml \
+  $SCRIPT_DIR/templates/cf/stub.yml \
+  $SCRIPT_DIR/templates/cf/stub-internal.yml \
   stubs/aws-resources.yml \
-  stubs/domain.yml \
+  stubs/cf/domain.yml \
   stubs/director-uuid.yml \
-  >> stubs/cf/aws.yml
+  >> stubs/cf/stub.yml
+
+if [ ! -f stubs/cf/properties.yml ]; then
+  cp $SCRIPT_DIR/stubs/cf/properties.yml stubs/cf/properties.yml
+fi
+
+mkdir -p stubs/diego
+
+if [ ! -f stubs/diego/property-overrides.yml ]; then
+  cp $SCRIPT_DIR/stubs/diego/property-overrides.yml stubs/diego/property-overrides.yml
+fi
+
+spiff merge \
+  $SCRIPT_DIR/../../manifest-generation/misc-templates/aws-iaas-settings.yml \
+  $SCRIPT_DIR/templates/diego/iaas-settings-internal.yml \
+  stubs/aws-resources.yml \
+  > stubs/diego/iaas-settings.yml
 
 popd

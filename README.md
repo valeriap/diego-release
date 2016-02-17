@@ -252,7 +252,7 @@ have no enforced limit. In addtion to that, the key label must not contain a
 separator.
 
 ---
-## TLS Configuration
+##<a name="tls-configuration"></a>TLS Configuration
 
 Diego Release can be configured to require TLS for communication with etcd.
 To enable or disable TLS communication with etcd, the `diego.etcd.require_ssl`

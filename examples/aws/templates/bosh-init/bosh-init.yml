@@ -17,7 +17,7 @@ jobs: (( merge ))
 
 cloud_provider:
   template: 
-    name: cpi
+    name: aws_cpi
     release: bosh-aws-cpi
 
   ssh_tunnel:

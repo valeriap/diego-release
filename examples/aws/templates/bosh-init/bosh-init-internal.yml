@@ -35,7 +35,7 @@ jobs:
   - {name: director, release: bosh}
   - {name: health_monitor, release: bosh}
   - {name: registry, release: bosh}
-  - {name: cpi, release: bosh-aws-cpi}
+  - {name: aws_cpi, release: bosh-aws-cpi}
 
   resource_pool: vms
   persistent_disk_pool: disks
@@ -87,7 +87,7 @@ jobs:
       address: 127.0.0.1
       name: my-bosh
       db: *db
-      cpi_job: cpi
+      cpi_job: aws_cpi
       max_threads: 10
 
     hm:
