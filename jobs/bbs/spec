@@ -62,3 +62,5 @@ properties:
   diego.bbs.etcd.max_idle_conns_per_host:
     description: "maximum number of idle http connections"
 
+  diego.bbs.db_dsn:
+    description: "DSN to use when connecting to RDBMS"

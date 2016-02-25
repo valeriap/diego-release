@@ -33,6 +33,7 @@ files:
   - github.com/cloudfoundry-incubator/bbs/db/*.go # gosub
   - github.com/cloudfoundry-incubator/bbs/db/etcd/*.go # gosub
   - github.com/cloudfoundry-incubator/bbs/db/etcd/test/etcd_helpers/*.go # gosub
+  - github.com/cloudfoundry-incubator/bbs/db/sql/*.go # gosub
   - github.com/cloudfoundry-incubator/bbs/encryption/*.go # gosub
   - github.com/cloudfoundry-incubator/bbs/events/*.go # gosub
   - github.com/cloudfoundry-incubator/bbs/format/*.go # gosub
@@ -59,6 +60,7 @@ files:
   - github.com/cloudfoundry/storeadapter/etcdstoreadapter/*.go # gosub
   - github.com/cloudfoundry/storeadapter/storerunner/etcdstorerunner/*.go # gosub
   - github.com/coreos/go-etcd/etcd/*.go # gosub
+  - github.com/go-sql-driver/mysql/*.go # gosub
   - github.com/gogo/protobuf/proto/*.go # gosub
   - github.com/gogo/protobuf/sortkeys/*.go # gosub
   - github.com/golang/protobuf/proto/*.go # gosub

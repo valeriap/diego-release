@@ -86,3 +86,6 @@ properties:
     description: "log level: debug, info, error or fatal"
   benchmark-bbs.log_file:
     description: "file name for benchmark log output in the BOSH log dir"
+
+  benchmark-bbs.db_dsn:
+    description: "DSN to use to connect to the sql database"
