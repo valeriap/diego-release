@@ -67,6 +67,9 @@ case $1 in
 
         echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
 
+        # load conntrack module
+        modprobe ip_conntrack
+
         # NF_CONNTRACK_MAX
         # Default value is 65536. We set it to a larger number to avoid running out of connections.
         echo 262144 > /proc/sys/net/netfilter/nf_conntrack_max
