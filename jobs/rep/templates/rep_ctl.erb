@@ -117,6 +117,7 @@ case $1 in
       -diskMB=<%= p("diego.executor.disk_capacity_mb") %> \
       -containerInodeLimit=<%= p("diego.executor.container_inode_limit") %> \
       -containerMaxCpuShares=<%= p("diego.executor.container_max_cpu_shares") %> \
+      -containerOwnerName=$cell_id \
       -cachePath=$CACHE_DIR \
       -maxCacheSizeInBytes=<%= p("diego.executor.max_cache_size_in_bytes") %>\
       -exportNetworkEnvVars=<%= p("diego.executor.export_network_env_vars") %>\
