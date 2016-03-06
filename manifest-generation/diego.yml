@@ -442,6 +442,11 @@ jobs:
         zone: z3
 
 properties:
+  # -- Properties below are used by the astroturf garden simulator --
+  astroturf:
+    rep_multiplier:
+      num_reps: (( property_overrides.astroturf.rep_multiplier.num_reps || nil ))
+
   # -- Properties below are used by the metron_agent job from cf-release --
   metron_agent:
     deployment: (( name ))
@@ -690,6 +695,9 @@ properties:
     persistent_image_list: (( property_overrides.garden.persistent_image_list || ["/var/vcap/packages/rootfs_cflinuxfs2/rootfs"] ))
     enable_graph_cleanup: (( property_overrides.garden.enable_graph_cleanup || true ))
     log_level: (( property_overrides.garden.log_level || nil ))
+    memory_capacity_in_bytes: (( property_overrides.astroturf.garden.memory_capacity_in_bytes ))
+    disk_capacity_in_bytes: (( property_overrides.astroturf.garden.disk_capacity_in_bytes ))
+    max_containers: (( property_overrides.astroturf.garden.max_containers ))
 
 
 # The keys below should not be included in the final stub
