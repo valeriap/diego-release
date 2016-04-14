@@ -22,8 +22,7 @@ go install github.com/vito/gosub
     -app github.com/cloudfoundry-incubator/route-emitter/cmd/... \
     -app github.com/cloudfoundry-incubator/stager/cmd/... \
     -app github.com/cloudfoundry-incubator/tps/cmd/... \
-    -app github.com/golang/protobuf... \
-    \
+    -app github.com/golang/protobuf/... \
     -app github.com/apcera/gnatsd
 
   # separate these so gosub doesn't asplode
@@ -45,7 +44,6 @@ go install github.com/vito/gosub
   gosub list -test github.com/cloudfoundry-incubator/benchmark-bbs/...
 
   gosub list -test github.com/cloudfoundry-incubator/auction/... \
-    \
     -test github.com/cloudfoundry-incubator/inigo/... \
     -test github.com/cloudfoundry-incubator/diego-upgrade-stability-tests/... \
     -test github.com/cloudfoundry-incubator/diegocanaryapp/...
