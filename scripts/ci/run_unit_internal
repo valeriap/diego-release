@@ -17,4 +17,4 @@ go install github.com/apcera/gnatsd
 go install github.com/coreos/etcd
 go install github.com/onsi/ginkgo/ginkgo
 
-RUN_SQL_TESTS=true "scripts/${SCRIPT}" "$@"
+"scripts/${SCRIPT}" "$@"
