@@ -15,12 +15,17 @@ if [ ! -z ${USE_SQL} ]; then
   sql_option="-s manifest-generation/bosh-lite-stubs/experimental/mysql/diego-sql.yml"
 fi
 
+if [[ ! -z ${ETC_INCLUDE} || ${ETCD_INCLUDE} = "true" ]]; then
+  etcd_option="-e false"
+fi
+
 pushd ${DIEGO_RELEASE_DIR}
 	$scripts_path/generate-deployment-manifest \
 			-c ${CF_MANIFESTS_DIR}/cf.yml \
 			-i manifest-generation/bosh-lite-stubs/iaas-settings.yml \
 			-p manifest-generation/bosh-lite-stubs/property-overrides.yml \
 			-n manifest-generation/bosh-lite-stubs/instance-count-overrides.yml \
+			${etcd_option} \
 			${sql_option} \
 			-v manifest-generation/bosh-lite-stubs/release-versions.yml \
 			"$@" \

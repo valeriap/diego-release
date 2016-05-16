@@ -21,6 +21,7 @@ OPTIONAL ARGUMENTS:
     -n <count-path>     Path to instance-count-overrides stub file.
     -v <versions-path>  Path to release-versions stub file.
     -s <sql-db-path>    Path to SQL stub file.
+    -e false            Drop etcd configuration in the manifest.
     -g                  Opt into using garden-runc-release for cells.
 
 EXAMPLE:
@@ -31,6 +32,7 @@ EXAMPLE:
       -n manifest-generation/bosh-lite-stubs/instance-count-overrides.yml \\
       -v manifest-generation/bosh-lite-stubs/release-versions.yml \\
       -s manifest-generation/bosh-lite-stubs/diego-sql.yml \\
+      -e false \\
       -g
 EOF
   exit 1
@@ -61,6 +63,9 @@ while getopts "c:i:p:n:v:s:krbg" opt; do
       ;;
     s)
       sql_settings=$OPTARG
+      ;;
+    e)
+      etcd_option=$OPTARG
       ;;
     k)
       >&2 echo "DEPRECATED -k flag: Persistent disk configuration moved to IaaS-settings stub."
@@ -114,6 +119,11 @@ if [[ ! -z "${sql_settings}" && ! -f "${sql_settings}" ]]; then
   argument_error=true
 fi
 
+if [[ -z "${etcd_option}" || "${etcd_option}" = "true" ]]; then
+  etcd_setting=${manifest_generation}/diego-etcd.yml
+  >&2 echo "ETCD SETTING ${etcd_setting}"
+fi
+
 if [[ ! -z "${instance_counts}" && ! -f "${instance_counts}" ]]; then
   >&2 echo "ERROR: Instance-count-overrides stub '${instance_counts}' is not a regular file"
   argument_error=true
@@ -137,8 +147,16 @@ spiff merge \
   ${cf_deployment_manifest} \
   > ${tmpdir}/config-from-cf.yml
 
+# spiff merge \
+#   ${etcd_setting} \
+#   ${release_versions} \
+#   ${instance_counts} \
+#   ${property_overrides} \
+#   > ${tmpdir}/diego-etcd.yml
+
 spiff merge \
-  ${manifest_generation}/diego.yml \
+  ${manifest_generation}/diego2.yml \
+  ${etcd_setting} \
   ${release_versions} \
   ${garden_properties} \
   ${property_overrides} \
