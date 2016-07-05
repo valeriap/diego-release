@@ -308,3 +308,6 @@
 	path = src/code.cloudfoundry.org/route-emitter
 	url = https://github.com/cloudfoundry/route-emitter
 	branch = master
+[submodule "src/github.com/ErikDubbelboer/gspt"]
+	path = src/github.com/ErikDubbelboer/gspt
+	url = https://github.com/ErikDubbelboer/gspt
