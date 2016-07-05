@@ -134,11 +134,11 @@ properties:
   diego.executor.garden_healthcheck.process.env:
     description: "Environment variables to use when running the garden health check"
   diego.executor.post_setup_hook:
-    description: "Experimental: arbitrary command to run after setup action"
+    description: "Arbitrary command to run after setup action"
   diego.executor.post_setup_user:
-    description: "Experimental: user to run post setup hook command"
+    description: "User to run post setup hook command"
   diego.executor.volman.driver_paths:
-    description: "Experimental: OS style path string containing the directories volman will look in for voldriver specs (delimited by : or ; depending on the OS)"
+    description: "OS style path string containing the directories volman will look in for voldriver specs (delimited by : or ; depending on the OS)"
     default: "/var/vcap/data/voldrivers"
 
   diego.rep.bbs.api_location:

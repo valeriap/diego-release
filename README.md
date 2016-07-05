@@ -175,14 +175,14 @@ The Diego manifest generation documentation can be found in [docs/manifest-gener
   ./scripts/generate-bosh-lite-manifests
   ```
 
-  1. **EXPERIMENTAL**: If using MySQL run the following to enable it on Diego:
+  1. If using MySQL run the following to enable it on Diego:
 
      ```bash
      cd ~/workspace/diego-release
      USE_SQL='mysql' ./scripts/generate-bosh-lite-manifests
      ```
 
-  1. **EXPERIMENTAL**: If using Postgres run the following to enable it on Diego:
+  1. If using Postgres run the following to enable it on Diego:
 
      ```bash
      cd ~/workspace/diego-release
@@ -199,7 +199,7 @@ The Diego manifest generation documentation can be found in [docs/manifest-gener
   bosh -n deploy
   ```
 
-1. **EXPERIMENTAL**: If configuring Diego to use MySQL, upload and deploy the latest cf-mysql-release:
+1. If configuring Diego to use MySQL, upload and deploy the latest cf-mysql-release:
 
   ```bash
   cd ~/workspace/diego-release
