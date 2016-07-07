@@ -29,9 +29,17 @@ build_gardenrunc () {
     go install github.com/cloudfoundry-incubator/guardian/cmd/init/
     go install github.com/cloudfoundry-incubator/guardian/cmd/dadoo/
     go install github.com/cloudfoundry-incubator/guardian/cmd/inspector-garden/
-
+    wget https://github.com/seccomp/libseccomp/releases/download/v2.3.1/libseccomp-2.3.1.tar.gz
+    tar zxf libseccomp-2.3.1.tar.gz
+ 
+    pushd libseccomp-2.3.1/
+    ./configure
+    make
+    make install
+    popd
+    export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
     pushd src/github.com/opencontainers/runc
-      GOPATH=${PWD}/Godeps/_workspace:${GOPATH} go install
+      GOPATH=${PWD}/Godeps/_workspace:${GOPATH} go install -tags "seccomp"
     popd
 
     pushd src/github.com/cloudfoundry-incubator/guardian/rundmc/nstar
