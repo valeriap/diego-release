@@ -39,7 +39,7 @@ build_gardenrunc () {
     popd
     export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
     pushd src/github.com/opencontainers/runc
-      GOPATH=${PWD}/Godeps/_workspace:${GOPATH} go install -tags "seccomp"
+      GOPATH=${PWD}/Godeps/_workspace:${GOPATH} BUILDTAGS="seccomp" make static
     popd
 
     pushd src/github.com/cloudfoundry-incubator/guardian/rundmc/nstar
