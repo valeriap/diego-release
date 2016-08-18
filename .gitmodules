@@ -347,3 +347,12 @@
 	path = src/code.cloudfoundry.org/goshims
 	url = https://github.com/cloudfoundry-incubator/goshims
 	branch = master
+[submodule "src/code.cloudfoundry.org/guardian"]
+	path = src/code.cloudfoundry.org/guardian
+	url = git@github.com:cloudfoundry/guardian.git
+[submodule "src/code.cloudfoundry.org/garden"]
+	path = src/code.cloudfoundry.org/garden
+	url = git@github.com:cloudfoundry/garden.git
+[submodule "src/github.com/eapache/go-resiliency"]
+	path = src/github.com/eapache/go-resiliency
+	url = https://github.com/eapache/go-resiliency.git
