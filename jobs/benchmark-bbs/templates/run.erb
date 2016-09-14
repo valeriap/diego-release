@@ -47,6 +47,7 @@ ginkgo -nodes=<%= p("benchmark-bbs.ginkgo_nodes") %> -- ${bbs_sec_flags} ${etcd_
   -desiredLRPs=<%= p("benchmark-bbs.desired_lrps") %> \
   -numTrials=<%= p("benchmark-bbs.num_trials") %> \
   -numReps=<%= p("benchmark-bbs.num_reps") %> \
+  -numSubscribers=<%= p("benchmark-bbs.num_subscribers") %> \
   -percentWrites=<%= p("benchmark-bbs.percent_writes") %> \
   -numPopulateWorkers=<%= p("benchmark-bbs.num_populate_workers") %> \
   -bbsAddress=${bbs_api_url} \
