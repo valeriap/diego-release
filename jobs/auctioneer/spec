@@ -7,6 +7,9 @@ templates:
   bbs_ca.crt.erb: config/certs/bbs/ca.crt
   bbs_client.crt.erb: config/certs/bbs/client.crt
   bbs_client.key.erb: config/certs/bbs/client.key
+  auctioneer_ca.crt.erb: config/certs/ca.crt
+  auctioneer_server.crt.erb: config/certs/server.crt
+  auctioneer_server.key.erb: config/certs/server.key
 
 packages:
   - pid_utils
@@ -31,6 +34,13 @@ properties:
   diego.auctioneer.dropsonde_port:
     description: "local metron agent's port"
     default: 3457
+
+  diego.auctioneer.ca_cert:
+    description: "PEM-encoded CA certificate"
+  diego.auctioneer.server_cert:
+    description: "PEM-encoded client certificate"
+  diego.auctioneer.server_key:
+    description: "PEM-encoded client key"
 
   diego.auctioneer.bbs.api_location:
     description: "Address to the BBS Server"
