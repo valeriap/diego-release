@@ -1,0 +1,7 @@
+property_overrides:
+  bbs:
+    require_ssl: true
+    ca_cert: (( merge ))
+    client_cert: (( merge ))
+    client_key: (( merge ))
+  skip_cert_verify: true

@@ -8,21 +8,23 @@ This document is for describing options to Diego manifest generation.
 1. [Options](#options)
 1. [Stubs](#stubs)
 
-### Scripts
+## Scripts
 
 ###1) diego-release/scripts/generate-deployment-manifest
 
-#### SYNOPSIS:
-    Generate a manifest for a Diego deployment to accompany an existing CF deployment.
+Generate a manifest for a Diego deployment to accompany an existing CF deployment.
 
+<br>
 #### USAGE:
     generate-deployment-manifest <MANDATORY ARGUMENTS> [OPTIONAL ARGUMENTS]
 
+<br>
 #### MANDATORY ARGUMENTS:
     -c <cf-path>        Path to CF manifest file.
     -i <iaas-path>      Path to IaaS-settings stub file.
     -p <property-path>  Path to property-overrides stub file.
 
+<br>
 #### OPTIONAL ARGUMENTS:
     -n <count-path>     Path to instance-count-overrides stub file.
     -v <versions-path>  Path to release-versions stub file.
@@ -32,6 +34,7 @@ This document is for describing options to Diego manifest generation.
     -b                  Opt into using capi-release for bridge components.
     -d <voldriver-path> Path to voldriver stub file.
 
+<br>
 #### EXAMPLE:
     scripts/generate-deployment-manifest \\
       -c ../cf-release/bosh-lite/deployments/cf.yml \\
@@ -45,6 +48,39 @@ This document is for describing options to Diego manifest generation.
       -g \\
       -b
 
+<br>
+###2) diego-release/scripts/generate-windows-cell-deployment-manifest
+
+
+Generate a windows manifest for a Diego deployment to accompany an existing CF deployment.
+
+<br>
+#### USAGE:
+	generate-windows-cell-deployment-manifest <MANDATORY ARGUMENTS> [OPTIONAL ARGUMENTS]
+
+<br>
+#### MANDATORY ARGUMENTS:
+    -c <cf-path>        Path to CF manifest file.
+    -i <iaas-path>      Path to IaaS-settings stub file.
+    -p <property-path>  Path to property-overrides stub file.
+
+<br>
+#### OPTIONAL ARGUMENTS:
+    -n <count-path>     Path to instance-count-overrides stub file.
+    -v <versions-path>  Path to release-versions stub file.
+
+<br>
+#### EXAMPLE:
+	scripts/generate-windows-cell-deployment-manifest
+      -c ../cf-release/bosh-lite/deployments/cf.yml \\
+      -i manifest-generation/bosh-lite-stubs/iaas-settings.yml \\
+      -p manifest-generation/bosh-lite-stubs/property-overrides.yml \\
+      -n manifest-generation/bosh-lite-stubs/instance-count-overrides.yml \\
+      -v manifest-generation/bosh-lite-stubs/release-versions.yml
+
+
+
+<br>
 ### Options
 
 #### -c Path to CF Manifest File
@@ -56,33 +92,34 @@ When fully migrated data from an etcd release to SQL, or a fresh install using S
 #### -g Opt into using garden-runc-release for cells
 To use garden-runc release instead of garden-linux.
 
-**Note**: Migration from garden-linux based cells to garden-runc cells is not supported.  Cells must be recreated if previously deployed using garden-linux.
+#### -s \<sql-db-path> *(Linux cells only)* 
+
+**Note**: Migration from garden-linux based cells to garden-runc cells is not supported.  Cells must be recreated if previously deployed using garden-linux. This option is not available for Windows cells.
 
 #### -b Opt into using capi-release for bridge components
 Use the cc-bridge components (e.g., stager, nsync, tps, etc.) from capi-release instead of cf-release.
 
+
+<br>
 ### Stubs
+
+Diego's manifest tooling assembles a manifest from *stub files* outlining the properties of a specific aspect of the system. Example bosh-lite stub files can be found [here](https://github.com/cloudfoundry/diego-release/manifest-generation/bosh-lite-stubs).
 
 #### IaaS settings stub file
 The  file to specify the IaaS specific values.  Items such as the subnet-configs, stemcell specifications etc.
 
-##### bosh-lite example:
-The bosh-lite IaaS-settings example can be found [iaas-settings.yml](https://github.com/cloudfoundry/diego-release/blob/develop/manifest-generation/bosh-lite-stubs/iaas-settings.yml).
-
 #### Property overrides stub file
 The  file to override specific diego properties
-
-##### Bosh-lite example:
-The bosh-lite property-overrides example can be found [property-overrides.yml](https://github.com/cloudfoundry/diego-release/blob/develop/manifest-generation/bosh-lite-stubs/property-overrides.yml)
 
 #### Instance count overrides stub file (optional)
 The file is used override the instance count for jobs in the diego manifest
 
-##### bosh-lite example:
-The bosh-lite instance-count-overrides example can be found [instance-count-overrides.yml](https://github.com/cloudfoundry/diego-release/blob/develop/manifest-generation/bosh-lite-stubs/instance-count-overrides.yml)
-
 #### Release versions override stub file (optional)
 The file is used to override the default (latest) release version for the releases used in the manifest
+
+
+<br>
+## Examples
 
 ##### Example:
 ```yaml

@@ -1,0 +1,7 @@
+property_overrides:
+  bbs:
+    ca_cert: (( diego_credentials.diego_ca ))
+    client_cert: (( diego_credentials.bbs.client_cert ))
+    client_key: (( diego_credentials.bbs.client_key ))
+
+diego_credentials: (( merge ))

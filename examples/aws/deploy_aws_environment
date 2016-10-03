@@ -248,4 +248,35 @@ spiff merge \
   stubs/aws-resources.yml \
   > stubs/cf-mysql/iaas-settings.yml
 
+mkdir -p stubs/diego-windows
+
+# generate Diego Windows property-override stub with certs
+if [ -f stubs/diego-windows/property-overrides.yml ]; then
+  # update BBS, etcd certs and keys in existing property-overrides stub
+  temp_property_overrides=$(mktemp stubs/diego-windows/property-overrides.yml.XXXXX)
+
+  spiff merge \
+    stubs/diego-windows/property-overrides.yml \
+    $SCRIPT_DIR/templates/diego-windows/property-overrides-internal.yml \
+    <(diego_credentials) \
+    > "${temp_property_overrides}"
+
+  mv "${temp_property_overrides}" stubs/diego-windows/property-overrides.yml
+else
+  # create new property-overrides stub with default overrides
+  spiff merge \
+    $SCRIPT_DIR/templates/diego-windows/property-overrides.yml \
+    $SCRIPT_DIR/templates/diego-windows/property-overrides-internal.yml \
+    <(diego_credentials) \
+    > stubs/diego-windows/property-overrides.yml
+fi
+
+# generate Diego Windows IaaS-settings stub
+#TODO if statement
+spiff merge \
+  $SCRIPT_DIR/../../manifest-generation/misc-templates/windows-aws-iaas-settings.yml \
+  $SCRIPT_DIR/templates/diego-windows/iaas-settings-internal.yml \
+  stubs/aws-resources.yml \
+  > stubs/diego-windows/iaas-settings.yml
+
 popd
