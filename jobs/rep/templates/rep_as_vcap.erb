@@ -56,9 +56,15 @@ exec /var/vcap/packages/rep/bin/rep ${bbs_sec_flags} \
   -listenAddr=<%= p("diego.rep.listen_addr") %> \
   -listenAddrSecurable=<%= p("diego.rep.listen_addr_securable") %> \
   -requireTLS=<%= p("diego.rep.require_tls") %> \
-  -caCert=<%= p("diego.rep.ca_cert") %> \
-  -serverCert=<%= p("diego.rep.server_cert") %> \
-  -serverKey=<%= p("diego.rep.server_key") %> \
+  <% if_p("diego.rep.ca_cert") do |value| %> \
+    -caCert=<% value %> \
+  <% end %> \
+  <% if_p("diego.rep.server_cert") do |value| %> \
+    -serverCert=<% value %> \
+  <% end %> \
+  <% if_p("diego.rep.server_key") do |value| %> \
+    -serverKey=<% value %> \
+  <% end %> \
   <%= p("diego.rep.preloaded_rootfses").map { |rootfs| "-preloadedRootFS #{rootfs}" }.join(" ") %> \
   <%= p("diego.rep.rootfs_providers").map { |provider| "-rootFSProvider #{provider}" }.join(" ") %> \
   <%= p("diego.rep.placement_tags").map { |tag| "-placementTag #{Shellwords.shellescape(tag)}" }.join(" ") %> \

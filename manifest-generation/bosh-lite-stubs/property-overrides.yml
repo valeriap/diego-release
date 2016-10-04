@@ -390,6 +390,10 @@ property_overrides:
   rep:
     evacuation_timeout_in_seconds: 60
     log_level: debug
+    require_tls: false
+    ca_cert: (( nil ))
+    server_cert: (( nil ))
+    server_key: (( nil ))
   route_emitter:
     log_level: debug
   skip_cert_verify: true
