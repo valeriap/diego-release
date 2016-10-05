@@ -116,7 +116,7 @@ mkdir -p deployments/bosh-init
 
 source bootstrap_environment
 
-# install certs for ELB
+install certs for ELB
 if ! aws iam get-server-certificate --server-certificate-name cfrouter; then
   aws iam upload-server-certificate                   \
     --server-certificate-name cfrouter                \
@@ -124,7 +124,7 @@ if ! aws iam get-server-certificate --server-certificate-name cfrouter; then
     --certificate-body file://certs/elb-cfrouter.pem
 fi
 
-# generate stub to be fed into template for cloudformation
+generate stub to be fed into template for cloudformation
 cat > stubs/infrastructure/certificates.yml <<EOF
 # GENERATED: NO TOUCHING
 EOF
@@ -132,7 +132,7 @@ EOF
 aws iam get-server-certificate --server-certificate-name cfrouter \
   >> stubs/infrastructure/certificates.yml
 
-# generate cloudformation template
+generate cloudformation template
 spiff merge \
   $SCRIPT_DIR/templates/infrastructure/boosh.yml \
   $SCRIPT_DIR/templates/infrastructure/boosh-internal.yml \
@@ -143,17 +143,17 @@ spiff merge \
   | boosh generate | jq -c -S . \
   > stubs/infrastructure/cloudformation.json
 
-# deploy infrastructure
+deploy infrastructure
 if [ $UPDATE_OR_CREATE != "skip" ]; then
   aws cloudformation $UPDATE_OR_CREATE \
     --stack-name $stack_name \
     --template-body file://stubs/infrastructure/cloudformation.json
 
-  # ensure that create or update was successful to aws
+  ensure that create or update was successful to aws
   boosh watch --name $stack_name
-  # generate AWS resources stub for shared purposes
+  generate AWS resources stub for shared purposes
   cat > stubs/aws-resources.yml <<EOF
-# GENERATED: NO TOUCHING
+ GENERATED: NO TOUCHING
 EOF
 
   boosh resources --name $stack_name >> stubs/aws-resources.yml
@@ -170,8 +170,8 @@ spiff merge \
   stubs/bosh-init/*.yml \
   >> deployments/bosh-init/bosh-init.yml
 
-bosh-init deploy deployments/bosh-init/bosh-init.yml
-bosh -n target $(cat stubs/aws-resources.yml | grep BoshInit | awk '{ gsub(/"/, "", $NF); print $NF }')
+osh-init deploy deployments/bosh-init/bosh-init.yml
+osh -n target $(cat stubs/aws-resources.yml | grep BoshInit | awk '{ gsub(/"/, "", $NF); print $NF }')
 
 # generate director uuid stub for template to create deployment stub
 cat > stubs/director-uuid.yml <<EOF
