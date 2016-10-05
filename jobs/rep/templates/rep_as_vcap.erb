@@ -32,9 +32,9 @@ export GODEBUG=netdns=cgo
 
 <% if p("diego.rep.require_tls") %>
   rep_sec_flags=" \
-   -caFile=${CONF_DIR}/certs/rep/ca.crt"
-   -certFile=${CONF_DIR}/certs/rep/server.crt \
-   -keyFile=${CONF_DIR}/certs/rep/server.key \
+   -caFile=${CONF_DIR}/certs/ca.crt
+   -certFile=${CONF_DIR}/certs/server.crt \
+   -keyFile=${CONF_DIR}/certs/server.key"
 <% else %>
   rep_sec_flags=""
 <% end %>
