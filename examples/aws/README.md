@@ -699,7 +699,6 @@ cd $DIEGO_RELEASE_DIR
   > $DEPLOYMENT_DIR/deployments/diego.yml
 ```
 
-
 ### Upload Garden-Linux, etcd, and cflinuxfs2 releases
 
 1. Upload the latest garden-linux-release:
@@ -734,3 +733,7 @@ bosh --parallel 10 create release --force
 bosh upload release
 bosh deploy
 ```
+
+### Deploying Windows Diego cells (optional)
+
+Follow these instructions to [Deploy Diego on Windows](OPTIONAL.md#deploy-windows-diego-cells)

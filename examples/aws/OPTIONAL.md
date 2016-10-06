@@ -9,9 +9,10 @@ These instructions allow you to either:
 ## Table of Contents
 
 1. [Setup a SQL database for Diego](#setup-a-sql-database-for-diego)
-  * [Setup RDS MySQL](#setup-aws-rds-mysql) *OR*
-  * [Deploy Standalone CF-MySQL](#deploy-standalone-cf-mysql)
-1. [Deploying Diego](#deploy-diego)
+   * [Setup RDS MySQL](#setup-aws-rds-mysql) *OR*
+   * [Deploy Standalone CF-MySQL](#deploy-standalone-cf-mysql)
+2. [Deploy Diego](#deploy-diego)
+3. [Deploy Windows Diego cells](#deploy-windows-diego-cells)
 
 ## Setup a SQL database for Diego
 
@@ -347,4 +348,50 @@ When deploying Garden-RunC on a previously deployed Diego with Garden-linux you 
 
 ```bash
 bosh -n deploy --recreate
+```
+## Deploy Windows Diego Cells
+
+### Generating the deployment manifest
+
+You can simply generate a deployment manifest for diego on windows using the following command. Remember that the `-n` instance-count-overrides flag and the `-v` release-versions flags are optional:
+
+``` shell
+cd $DIEGO_RELEASE_DIR
+./scripts/generate-windows-cell-deployment-manifest \
+  -c $DEPLOYMENT_DIR/deployments/cf.yml \
+  -i $DEPLOYMENT_DIR/stubs/diego-windows/iaas-settings.yml \
+  -p $DEPLOYMENT_DIR/stubs/diego-windows/property-overrides.yml \
+  -n $DEPLOYMENT_DIR/stubs/diego-windows/instance-count-overrides.yml \
+  -v $DEPLOYMENT_DIR/stubs/diego-windows/release-versions.yml \
+  > $DEPLOYMENT_DIR/deployments/diego-windows.yml
+```
+
+### Upload the Windows BOSH Stemcell
+
+Download the stemcell from [here](https://s3.amazonaws.com/bosh-windows-stemcells/light-bosh-stemcell-0.0.50-aws-xen-hvm-windows2012R2-go_agent.tgz). Replace `/path/to/stemcell/` below with the path of the stemcell:
+
+```bash
+bosh upload stemcell /path/to/stemcell
+```
+
+### Download releases
+
+The following are the releases required to deploy diego on windows:
+
+1. [garden-windows-release](https://github.com/cloudfoundry-incubator/garden-windows-bosh-release/releases/latest)
+2. [diego-release](http://bosh.io/releases/github.com/cloudfoundry/diego-release?all=1)
+
+### Uploading and Deploying
+
+Assuming you have already uploaded diego-release. If `/path/to/downloaded/release` is the path to the `diego-windows-release` downoaded in the previous step, you can upload it by running:
+
+``` shell
+bosh upload release /path/to/downloaded/release
+```
+
+You can then deploy diego windows cells by running:
+
+``` shell
+bosh deployment $DEPLOYMENT_DIR/deployments/diego-windows.yml
+bosh deploy
 ```

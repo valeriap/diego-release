@@ -67,6 +67,18 @@ subnets:
     cidr: (( meta.vpc.base ".7.0/24" ))
     availability_zone: (( meta.availability_zones.[2] ))
 
+  - name: DiegoWindowsZ1
+    cidr: (( meta.vpc.base ".20.0/24" ))
+    availability_zone: (( meta.availability_zones.[0] ))
+
+  - name: DiegoWindowsZ2
+    cidr: (( meta.vpc.base ".21.0/24" ))
+    availability_zone: (( meta.availability_zones.[1] ))
+
+  - name: DiegoWindowsZ3
+    cidr: (( meta.vpc.base ".22.0/24" ))
+    availability_zone: (( meta.availability_zones.[2] ))
+
   - name: Errands
     cidr: (( meta.vpc.base ".10.0/24" ))
     availability_zone: (( meta.availability_zones.[2] ))
