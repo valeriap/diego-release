@@ -373,13 +373,24 @@ In order to successfully deploy Diego Windows cells, you will need to upload the
 
 ### Edit the Instance-Count-Overrides Stub
 
-Copy the example stub to `$DEPLOYMENT_DIR/stubs/diego-windows/instance-count-overrides.yml`:
+Copy the example stub to `$DEPLOYMENT_DIR/stubs/diego/instance-count-overrides.yml`:
 
 ```bash
 cp $DIEGO_RELEASE_DIR/examples/aws/stubs/diego/instance-count-overrides-example.yml $DEPLOYMENT_DIR/stubs/diego-windows/instance-count-overrides.yml
 ```
 
 Edit that file to change the instance counts of the deployed Diego VMs.
+
+And example instance count overrides stub is below:
+
+```yaml
+---
+instance_count_overrides:
+  cell_windows_z1:
+    instances: 5
+  cell_windows_z2:
+    instances: 0
+```
 
 ### Edit the Release-Versions Stub
 
@@ -396,6 +407,7 @@ director.
 An example release versions stub is below:
 
 ```yaml
+---
 release-versions:
   diego: latest
   garden-windows: latest
