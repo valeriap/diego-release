@@ -390,6 +390,8 @@ property_overrides:
   stager:
     log_level: debug
   rep:
+    enable_legacy_api_endpoints: false
+    listen_addr_admin: 127.0.0.1:1800
     evacuation_timeout_in_seconds: 60
     log_level: debug
     require_tls: false
