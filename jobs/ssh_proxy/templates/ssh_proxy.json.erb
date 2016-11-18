@@ -1,0 +1,46 @@
+{
+  "address": "<%= p("diego.ssh_proxy.listen_addr") %>",
+  "health_check_address": "<%= p("diego.ssh_proxy.healthcheck_listen_addr") %>",
+  "host_key": "<%= p("diego.ssh_proxy.host_key") %>",
+<% if p("diego.ssh_proxy.bbs.require_ssl") %>
+  "bbs_api_url": "<%= "https://" + p("diego.ssh_proxy.bbs.api_location") %>",
+  "bbs_client_cert": "/var/vcap/jobs/ssh_proxy/config/certs/bbs/client.crt",
+  "bbs_client_key": "/var/vcap/jobs/ssh_proxy/config/certs/bbs/client.key",
+  "bbs_ca_cert": "/var/vcap/jobs/ssh_proxy/config/certs/bbs/ca.crt",
+<% else %>
+  "bbs_address": "<%= "http://" + p("diego.ssh_proxy.bbs.api_location") %>",
+<% end %>
+<% if p("diego.ssh_proxy.enable_diego_auth") %>
+  "enable_diego_auth": true,
+  "diego_credentials": "<%= p("diego.ssh_proxy.diego_credentials") %>",
+<% else %>
+  "enable_diego_auth": false,
+<% end %>
+<% if p("diego.ssh_proxy.enable_cf_auth") %>
+  "enable_cf_auth": true,
+  "uaa_token_url": "<%= p("diego.ssh_proxy.uaa_token_url") %>",
+  "uaa_password": "<%= p("diego.ssh_proxy.uaa_secret") %>",
+  "uaa_username": "ssh-proxy",
+<% else %>
+  "enable_cf_auth": false,
+<% end %>
+  "consul_cluster": "http://127.0.0.1:8500",
+<% if_p("diego.ssh_proxy.allowed_ciphers") do |value| %>
+  "allowed_ciphers": "<%= value %>",
+<% end %>
+<% if_p("diego.ssh_proxy.allowed_macs") do |value| %>
+  "allowed_macs": "<%= value %>",
+<% end %>
+<% if_p("diego.ssh_proxy.allowed_keyexchanges") do |value| %>
+  "allowed_key_exchanges": "<%= value %>",
+<% end %>
+<% if_p("diego.ssh_proxy.bbs.client_session_cache_size") do |value| %>
+  "bbs_client_session_cache_size": <%= value %>,
+<% end %>
+<% if_p("diego.ssh_proxy.bbs.max_idle_conns_per_host") do |value| %>
+  "bbs_max_idle_conns_per_host": <%= value %>,
+<% end %>
+  "cc_api_url": "http://<%= p("diego.ssh_proxy.cc.internal_service_hostname") %>:<%= p("diego.ssh_proxy.cc.external_port") %>",
+  "dropsonde_port": <%= p("diego.ssh_proxy.dropsonde_port") %>,
+  "skip_cert_verify": <%= p("diego.ssl.skip_cert_verify") %>
+}
