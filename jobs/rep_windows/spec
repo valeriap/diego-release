@@ -18,12 +18,6 @@ packages:
   - rep_windows
 
 properties:
-  diego.rep.stack:
-    description: "The stack for which to handle requests"
-    default: "windows2012R2"
-  diego.rep.listen_addr:
-    description: "address to serve auction and LRP stop requests on"
-    default: "0.0.0.0:1800"
   diego.rep.debug_addr:
     description: "address at which to serve debug info"
     default: "127.0.0.1:17008"
@@ -51,9 +45,6 @@ properties:
   diego.rep.dropsonde_port:
     description: "local metron agent's port"
     default: 3457
-  diego.rep.consul_agent_port:
-    description: "local consul agent's port"
-    default: 8500
   diego.rep.trusted_certs:
     description: "Concatenation of trusted CA certificates to be made available on the cell."
     default: null
@@ -98,6 +89,8 @@ properties:
   diego.executor.container_inode_limit:
     description: "the inode limit enforced on each garden container."
     default: 200000
+  diego.executor.container_metrics_report_interval:
+    description: "the frequency for emitting container metrics"
   diego.executor.cache_path:
     description: "path to the executor's cache"
     default: "/var/vcap/data/executor_cache"
@@ -106,10 +99,10 @@ properties:
     default: 10000000000
   diego.executor.garden.address:
     description: "Garden server listening address."
-    default: /var/vcap/data/garden/garden.sock
+    default: 127.0.0.1:9241
   diego.executor.garden.network:
     description: "Network type for the garden server connection (tcp or unix)."
-    default: unix
+    default: tcp
   diego.executor.export_network_env_vars:
     description: "Export network environment variables into container (e.g. CF_INSTANCE_IP, CF_INSTANCE_PORT)."
     default: true
