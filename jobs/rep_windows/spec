@@ -73,6 +73,9 @@ properties:
   diego.ssl.skip_cert_verify:
     description: "when connecting over https, ignore bad ssl certificates"
     default: false
+  diego.executor.ca_certs_for_downloads:
+    description: "Concatenation of trusted CA certificates to be used when downloading assets."
+    default: null
 
   diego.executor.memory_capacity_mb:
     description: "the memory capacity the executor should manage.  this should not be greater than the actual memory on the VM"
@@ -136,13 +139,13 @@ properties:
     default: "10m"
   diego.executor.garden_healthcheck.command_retry_pause:
     description: "Time to wait between retrying garden commands"
-    default: "5s"
+    default: "1s"
   diego.executor.garden_healthcheck.process.path:
     description: "Path of the command to run to perform a container healthcheck"
-    default: "/bin/sh"
+    default: "C:\\windows\\system32\\cmd.exe"
   diego.executor.garden_healthcheck.process.args:
     description: "List of command line args to pass to the garden health check process"
-    default: "-c, ls > /tmp/test"
+    default: "/c, dir"
   diego.executor.garden_healthcheck.process.user:
     description: "User to use while performing a container healthcheck"
     default: "vcap"
@@ -189,3 +192,7 @@ properties:
   syslog_daemon_config.transport:
     description: "Syslog transport protocol (tcp or udp)"
     default: "udp"
+
+  diego.rep.job_name:
+    description: "The name of the Diego job referenced by this spec (DO NOT override)"
+    default: "rep_windows"
