@@ -227,6 +227,8 @@ property_overrides:
       QByXVUoXMbBBtmUyhVTizXhpNBP2dELMk+NVdnVWHCiGTtBAUTpk
       -----END RSA PRIVATE KEY-----
   bbs:
+    convergence:
+      repeat_interval_in_seconds: 60000000
     active_key_label: key1
     encryption_keys:
       - label: key1
