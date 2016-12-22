@@ -20,6 +20,7 @@ files:
   - code.cloudfoundry.org/bbs/models/*.go # gosub
   - code.cloudfoundry.org/bbs/models/test/model_helpers/*.go # gosub
   - code.cloudfoundry.org/benchmarkbbs/*.go # gosub
+  - code.cloudfoundry.org/benchmarkbbs/config/*.go # gosub
   - code.cloudfoundry.org/benchmarkbbs/generator/*.go # gosub
   - code.cloudfoundry.org/benchmarkbbs/reporter/*.go # gosub
   - code.cloudfoundry.org/cfhttp/*.go # gosub
