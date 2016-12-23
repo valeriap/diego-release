@@ -8,8 +8,8 @@ ERROR_CODE=0
 SQL_FLAVOR=mysql $scripts_path/run-unit-tests-with-backing-store
 ERROR_CODE=$?
 
-SQL_FLAVOR=postgres $scripts_path/run-unit-tests-with-backing-store
-let ERROR_CODE+=$?
+# SQL_FLAVOR=postgres $scripts_path/run-unit-tests-with-backing-store
+# let ERROR_CODE+=$?
 
 $scripts_path/run-unit-tests-no-backing-store
 let ERROR_CODE+=$?
