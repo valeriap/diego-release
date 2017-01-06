@@ -59,9 +59,38 @@ build_gardenrunc () {
   popd
 }
 
+build_grootfs () {
+  echo "Building grootfs..."
+  export GARDEN_GOPATH=${PWD}/garden-runc-release
+
+  mkdir -p ${GARDEN_GOPATH}/src/code.cloudfoundry.org
+  cp -r grootfs ${GARDEN_GOPATH}/src/code.cloudfoundry.org
+
+  pushd ${GARDEN_GOPATH}/src/code.cloudfoundry.org/grootfs
+    export PATH=${GOPATH}/bin:${PATH}
+
+    # Set up btrfs volume and loopback devices in environment
+    apt-get install -y btrfs-tools
+    source ci/scripts/test/utils.sh
+    mount_btrfs
+
+    make
+
+    mv grootfs ${GOPATH}/bin
+    mv drax ${GOPATH}/bin
+
+    echo "grootfs installed."
+  popd
+}
+
+
 setup_localhost_hosts
 
 build_gardenrunc
+
+if [ "x$SQL_FLAVOR" = "xpostgres" ]; then
+	build_grootfs
+fi
 
 cd diego-release/
 
