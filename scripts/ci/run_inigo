@@ -2,6 +2,7 @@
 
 set -e -x
 
+export TMP_HOME=${PWD}
 export GOROOT=/usr/local/go
 export PATH=${GOROOT}/bin:${PATH}
 
@@ -67,6 +68,7 @@ build_grootfs () {
   cp -r grootfs ${GARDEN_GOPATH}/src/code.cloudfoundry.org
 
   pushd ${GARDEN_GOPATH}/src/code.cloudfoundry.org/grootfs
+    export GOPATH=${GARDEN_GOPATH}
     export PATH=${GOPATH}/bin:${PATH}
 
     # Set up btrfs volume and loopback devices in environment
@@ -83,12 +85,18 @@ build_grootfs () {
   popd
 }
 
+create_grootfs_image () {
+  pushd ${GARDEN_GOPATH}
+    grootfs --store /mnt/btrfs create docker:///cloudfoundry/inigo-ci-rootfs:latest inigroot
+  popd
+}
+
 
 setup_localhost_hosts
 
 build_gardenrunc
 
-if [ "x$SQL_FLAVOR" = "xpostgres" ]; then
+if [ "x${USE_GROOTFS}" = "xtrue" ]; then
 	build_grootfs
 fi
 
@@ -121,7 +129,6 @@ for package in github.com/apcera/gnatsd; do
 done
 
 cd "${GOPATH_ROOT}/src/code.cloudfoundry.org/inigo"
-
 go install github.com/onsi/ginkgo/ginkgo
 
 # use the 1.28 version of tar that's installed in the inigo-ci docker image
@@ -129,8 +136,13 @@ ln -s /usr/local/bin/tar "${GARDEN_BINPATH}"
 
 export GARDEN_ROOTFS=/tmp/opt/inigo/rootfs
 mkdir -p "${GARDEN_ROOTFS}"
-mount -t tmpfs tmpfs "${GARDEN_ROOTFS}"
-cp -rp /opt/inigo/rootfs/* "${GARDEN_ROOTFS}"
+
+if [ "x${USE_GROOTFS}" = "xtrue" ]; then
+  create_grootfs_image
+else
+  mount -t tmpfs tmpfs "${GARDEN_ROOTFS}"
+  cp -rp /opt/inigo/rootfs/* "${GARDEN_ROOTFS}"
+fi
 
 # used for routing to apps; same logic that Garden uses.
 EXTERNAL_ADDRESS=$(ip route get 8.8.8.8 | sed 's/.*src\s\(.*\)\s/\1/;tx;d;:x')
