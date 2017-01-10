@@ -78,8 +78,8 @@ build_grootfs () {
 
     make
 
-    mv grootfs ${GOPATH}/bin
-    mv drax ${GOPATH}/bin
+    mv grootfs /usr/local/bin
+    mv drax /usr/local/bin
 
     echo "grootfs installed."
   popd
