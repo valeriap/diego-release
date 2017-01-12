@@ -72,25 +72,41 @@ build_grootfs () {
     export PATH=${GOPATH}/bin:${PATH}
 
     # Set up btrfs volume and loopback devices in environment
-    apt-get install -y btrfs-tools
+    #apt-get install -y btrfs-tools uidmap
     source ci/scripts/test/utils.sh
     mount_btrfs
+    umount /sys/fs/cgroup || true
 
     make
 
-    mv grootfs /usr/local/bin
+    mv grootfs ${GARDEN_GOPATH}/bin
     mv drax /usr/local/bin
+    chown root:root /usr/local/bin/drax
+    chmod u+s /usr/local/bin/drax
 
     echo "grootfs installed."
+
+    groupadd iamgroot -g 4294967294
+    useradd iamgroot -u 4294967294 -g 4294967294
+    echo "iamgroot:1:4294967293" > /etc/subuid
+    echo "iamgroot:1:4294967293" > /etc/subgid
   popd
 }
 
-create_grootfs_image () {
-  pushd ${GARDEN_GOPATH}
-    grootfs --store /mnt/btrfs create docker:///cloudfoundry/inigo-ci-rootfs:latest inigroot
-  popd
-}
+set_garden_rootfs () {
+  # use the 1.29 version of tar that's installed in the inigo-ci docker image
+  ln -s /usr/local/bin/tar "${GARDEN_BINPATH}"
 
+  if [ "x${USE_GROOTFS}" = "xtrue" ]; then
+    tar cpf /tmp/rootfs.tar -C /opt/inigo/rootfs .
+    export GARDEN_ROOTFS=/tmp/rootfs.tar
+  else
+    export GARDEN_ROOTFS=/tmp/opt/inigo/rootfs
+    mkdir -p "${GARDEN_ROOTFS}"
+    mount -t tmpfs tmpfs "${GARDEN_ROOTFS}"
+    cp -rp /opt/inigo/rootfs/* "${GARDEN_ROOTFS}"
+  fi
+}
 
 setup_localhost_hosts
 
@@ -131,18 +147,14 @@ done
 cd "${GOPATH_ROOT}/src/code.cloudfoundry.org/inigo"
 go install github.com/onsi/ginkgo/ginkgo
 
-# use the 1.28 version of tar that's installed in the inigo-ci docker image
-ln -s /usr/local/bin/tar "${GARDEN_BINPATH}"
+setup_garden_rootfs
+# use the 1.29 version of tar that's installed in the inigo-ci docker image
+# ln -s /usr/local/bin/tar "${GARDEN_BINPATH}"
 
-export GARDEN_ROOTFS=/tmp/opt/inigo/rootfs
-mkdir -p "${GARDEN_ROOTFS}"
-
-if [ "x${USE_GROOTFS}" = "xtrue" ]; then
-  create_grootfs_image
-else
-  mount -t tmpfs tmpfs "${GARDEN_ROOTFS}"
-  cp -rp /opt/inigo/rootfs/* "${GARDEN_ROOTFS}"
-fi
+# export GARDEN_ROOTFS=/tmp/opt/inigo/rootfs
+# mkdir -p "${GARDEN_ROOTFS}"
+# mount -t tmpfs tmpfs "${GARDEN_ROOTFS}"
+# cp -rp /opt/inigo/rootfs/* "${GARDEN_ROOTFS}"
 
 # used for routing to apps; same logic that Garden uses.
 EXTERNAL_ADDRESS=$(ip route get 8.8.8.8 | sed 's/.*src\s\(.*\)\s/\1/;tx;d;:x')
