@@ -87,7 +87,7 @@ properties:
 
   diego.rep.consul.require_tls:
     description: "Require mutual TLS to talk to the local consul API"
-    default: true
+    default: false
   diego.rep.consul.ca_cert:
     description: "PEM-encoded CA certificate"
   diego.rep.consul.client_cert:
