@@ -68,6 +68,18 @@ properties:
     description: "Array of optional tags used for scheduling Tasks and LRPs"
     default: []
 
+  diego.metron.use_v2_api:
+    description: "True to use local metron agent gRPC v2 api. False, to use UDP v1 api"
+    default: false
+  diego.metron.v2_api_port:
+    description: "Local metron agent gRPC port"
+  diego.metron.ca_cert:
+    description: "CA Cert used to communicate with local metron agent over gRPC"
+  diego.metron.cert:
+    description: "Cert used to communicate with local metron agent over gRPC"
+  diego.metron.key:
+    description: "Key used to communicate with local metron agent over gRPC"
+
   diego.rep.enable_legacy_api_endpoints:
     description: "Whether to enable the auction, LRP, and Task endpoints on the legacy, insecurable API server"
     default: true

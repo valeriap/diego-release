@@ -58,6 +58,18 @@ properties:
     description: "Concatenation of trusted CA certificates to be made available on the cell."
     default: null
 
+  diego.metron.use_v2_api:
+    description: "True to use local metron agent gRPC v2 api. False, to use UDP v1 api"
+    default: false
+  diego.metron.v2_api_port:
+    description: "Local metron agent gRPC port"
+  diego.metron.ca_cert:
+    description: "CA Cert used to communicate with local metron agent over gRPC"
+  diego.metron.cert:
+    description: "Cert used to communicate with local metron agent over gRPC"
+  diego.metron.key:
+    description: "Key used to communicate with local metron agent over gRPC"
+
   diego.rep.advertise_domain:
     description: "base domain at which the rep should advertise its secure API"
     default: "cell.service.cf.internal"
