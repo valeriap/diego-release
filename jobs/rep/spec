@@ -18,6 +18,9 @@ templates:
   consul_ca.crt.erb: config/certs/consul/ca.crt
   consul_client.crt.erb: config/certs/consul/client.crt
   consul_client.key.erb: config/certs/consul/client.key
+  metron_ca.crt.erb: config/certs/metron/ca.crt
+  metron_client.crt.erb: config/certs/metron/client.crt
+  metron_client.key.erb: config/certs/metron/client.key
   rep.json.erb: config/rep.json
   post-start.erb: bin/post-start
 
@@ -73,6 +76,7 @@ properties:
     default: false
   diego.metron.v2_api_port:
     description: "Local metron agent gRPC port"
+    default: 3458
   diego.metron.ca_cert:
     description: "CA Cert used to communicate with local metron agent over gRPC"
   diego.metron.cert:

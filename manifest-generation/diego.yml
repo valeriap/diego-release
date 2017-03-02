@@ -492,6 +492,12 @@ properties:
     # -- Global property --
     ssl:
       skip_cert_verify: (( property_overrides.skip_cert_verify || nil ))
+    metron:
+      use_v2_api:  (( property_overrides.metron.use_v2_api || nil ))
+      v2_api_port: (( config_from_cf.metron_agent.grpc_port ))
+      ca_cert:     (( config_from_cf.loggregator.tls.ca_cert ))
+      cert:        (( config_from_cf.metron_agent.tls.client_cert ))
+      key:         (( config_from_cf.metron_agent.tls.client_key ))
 
     # -- Job-specific properties --
     auctioneer:

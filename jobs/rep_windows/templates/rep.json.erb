@@ -127,11 +127,12 @@ if_p("diego.executor.instance_identity_ca_cert", "diego.executor.instance_identi
 	end
 end
 
+config[:metron_use_v2_api] = p("diego.metron.use_v2_api")
 if p("diego.metron.use_v2_api") == true
   config[:metron_api_port] = p("diego.metron.v2_api_port")
-  config[:metron_ca_path] = "#{CONF_DIR}/certs/rep/metron_ca.crt"
-  config[:metron_cert_path] = "#{CONF_DIR}/certs/rep/metron.crt"
-  config[:metron_key_path] = "#{CONF_DIR}/certs/rep/metron.key"
+  config[:metron_ca_path] = "#{CONF_DIR}/certs/metron/ca.crt"
+  config[:metron_cert_path] = "#{CONF_DIR}/certs/metron/client.crt"
+  config[:metron_key_path] = "#{CONF_DIR}/certs/metron/client.key"
 end
 
 config.to_json
