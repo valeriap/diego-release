@@ -3,6 +3,8 @@ package loggregator_v2
 import (
 	"time"
 
+	"code.cloudfoundry.org/lager"
+
 	"github.com/cloudfoundry/sonde-go/events"
 )
 
@@ -10,6 +12,7 @@ import (
 //go:generate counterfeiter -o fakes/fake_ingress_sender_server.go . Ingress_SenderServer
 
 type grpcClient struct {
+	logger lager.Logger
 	client Ingress_SenderClient
 }
 
@@ -47,6 +50,7 @@ func (c *grpcClient) SendAppErrorLog(appID, message, sourceType, sourceInstance 
 }
 
 func (c *grpcClient) SendAppMetrics(m *events.ContainerMetric) error {
+	c.logger.Info("grpc-logger-send-metric", lager.Data{"app-id": m.GetApplicationId()})
 	c.client.Send(&Envelope{
 		Timestamp: int64(time.Now().Nanosecond()),
 		SourceId:  m.GetApplicationId(),

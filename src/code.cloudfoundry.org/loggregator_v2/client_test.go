@@ -193,8 +193,13 @@ var _ = Describe("Client", func() {
 
 		It("sends app metrics", func() {
 			metric := events.ContainerMetric{
-				ApplicationId: proto.String("app-id"),
-				CpuPercentage: proto.Float64(10.0),
+				ApplicationId:    proto.String("app-id"),
+				CpuPercentage:    proto.Float64(10.0),
+				MemoryBytes:      proto.Uint64(10),
+				DiskBytes:        proto.Uint64(10),
+				MemoryBytesQuota: proto.Uint64(20),
+				DiskBytesQuota:   proto.Uint64(20),
+				InstanceIndex:    proto.Int32(0),
 			}
 			Consistently(func() error {
 				return client.SendAppMetrics(&metric)
@@ -209,6 +214,16 @@ var _ = Describe("Client", func() {
 			Expect(env.GetSourceId()).To(Equal("app-id"))
 			Expect(metrics.GetMetrics()["cpu"].GetValue()).To(Equal(10.0))
 			Expect(metrics.GetMetrics()["cpu"].GetUnit()).To(Equal("nano")) // TODO: what should this be ?
+			Expect(metrics.GetMetrics()["memory"].GetValue()).To(Equal(10.0))
+			Expect(metrics.GetMetrics()["memory"].GetUnit()).To(Equal("bytes"))
+			Expect(metrics.GetMetrics()["disk"].GetValue()).To(Equal(10.0))
+			Expect(metrics.GetMetrics()["disk"].GetUnit()).To(Equal("bytes"))
+			Expect(metrics.GetMetrics()["memory_quota"].GetValue()).To(Equal(10.0))
+			Expect(metrics.GetMetrics()["memory_quota"].GetUnit()).To(Equal("bytes"))
+			Expect(metrics.GetMetrics()["disk_quota"].GetValue()).To(Equal(10.0))
+			Expect(metrics.GetMetrics()["disk_quota"].GetUnit()).To(Equal("bytes"))
+			Expect(metrics.GetMetrics()["index"].GetValue()).To(Equal(10.0))
+			Expect(metrics.GetMetrics()["index"].GetUnit()).To(Equal("index"))
 		})
 	})
 })

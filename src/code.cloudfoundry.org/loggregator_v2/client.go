@@ -70,5 +70,5 @@ func NewClient(logger lager.Logger, config MetronConfig) (Client, error) {
 		logger.Error("failed-to-create-grpc-sender", err)
 		return nil, err
 	}
-	return &grpcClient{sender}, nil
+	return &grpcClient{logger.Session("grpc-client"), sender}, nil
 }
