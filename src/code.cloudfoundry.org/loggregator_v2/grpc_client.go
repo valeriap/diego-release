@@ -53,9 +53,29 @@ func (c *grpcClient) SendAppMetrics(m *events.ContainerMetric) error {
 		Message: &Envelope_Gauge{
 			Gauge: &Gauge{
 				Metrics: map[string]*GaugeValue{
+					"instance_index": &GaugeValue{
+						Unit:  "index",
+						Value: float64(m.GetInstanceIndex()),
+					},
 					"cpu": &GaugeValue{
 						Unit:  "nano",
-						Value: m.GetCpuPercentage(),
+						Value: float64(m.GetCpuPercentage()),
+					},
+					"memory": &GaugeValue{
+						Unit:  "bytes",
+						Value: float64(m.GetMemoryBytes()),
+					},
+					"disk": &GaugeValue{
+						Unit:  "bytes",
+						Value: float64(m.GetDiskBytes()),
+					},
+					"memory_quota": &GaugeValue{
+						Unit:  "bytes",
+						Value: float64(m.GetMemoryBytesQuota()),
+					},
+					"disk_quota": &GaugeValue{
+						Unit:  "bytes",
+						Value: float64(m.GetDiskBytesQuota()),
 					},
 				},
 			},

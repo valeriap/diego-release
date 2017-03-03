@@ -1,4 +1,6 @@
 property_overrides:
+  metron:
+    use_v2_api: true
   etcd:
     require_ssl: true
     peer_require_ssl: true

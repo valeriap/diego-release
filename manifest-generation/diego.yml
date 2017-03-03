@@ -496,8 +496,8 @@ properties:
       use_v2_api:  (( property_overrides.metron.use_v2_api || nil ))
       v2_api_port: (( config_from_cf.metron_agent.grpc_port ))
       ca_cert:     (( config_from_cf.loggregator.tls.ca_cert ))
-      cert:        (( config_from_cf.metron_agent.tls.client_cert ))
-      key:         (( config_from_cf.metron_agent.tls.client_key ))
+      cert:        (( config_from_cf.loggregator.tls.metron.cert ))
+      key:         (( config_from_cf.loggregator.tls.metron.key ))
 
     # -- Job-specific properties --
     auctioneer:
