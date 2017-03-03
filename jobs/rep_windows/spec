@@ -16,6 +16,9 @@ templates:
   consul_client.crt.erb: config/certs/consul/client.crt
   consul_client.key.erb: config/certs/consul/client.key
   rep.json.erb: config/rep.json
+  loggregator_ca.crt.erb: config/certs/loggregator/ca.crt
+  loggregator_client.crt.erb: config/certs/loggregator/client.crt
+  loggregator_client.key.erb: config/certs/loggregator/client.key
 
 packages:
   - rep_windows
@@ -58,16 +61,17 @@ properties:
     description: "Concatenation of trusted CA certificates to be made available on the cell."
     default: null
 
-  diego.metron.use_v2_api:
+  loggregator.use_v2_api:
     description: "True to use local metron agent gRPC v2 api. False, to use UDP v1 api"
     default: false
-  diego.metron.v2_api_port:
+  loggregator.v2_api_port:
     description: "Local metron agent gRPC port"
-  diego.metron.ca_cert:
+    default: 3458
+  loggregator.ca_cert:
     description: "CA Cert used to communicate with local metron agent over gRPC"
-  diego.metron.cert:
+  loggregator.cert:
     description: "Cert used to communicate with local metron agent over gRPC"
-  diego.metron.key:
+  loggregator.key:
     description: "Key used to communicate with local metron agent over gRPC"
 
   diego.rep.advertise_domain:

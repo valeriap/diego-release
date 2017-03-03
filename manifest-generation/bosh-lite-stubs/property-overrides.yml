@@ -1,5 +1,5 @@
 property_overrides:
-  metron:
+  loggregator:
     use_v2_api: true
   etcd:
     require_ssl: true

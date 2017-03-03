@@ -25,11 +25,11 @@ type Client interface {
 }
 
 type MetronConfig struct {
-	UseV2API      bool   `json:"metron_use_v2_api"`
-	APIPort       int    `json:"metron_api_port"`
-	CACertPath    string `json:"metron_ca_path"`
-	CertPath      string `json:"metron_cert_path"`
-	KeyPath       string `json:"metron_key_path"`
+	UseV2API      bool   `json:"loggregator_use_v2_api"`
+	APIPort       int    `json:"loggregator_api_port"`
+	CACertPath    string `json:"loggregator_ca_path"`
+	CertPath      string `json:"loggregator_cert_path"`
+	KeyPath       string `json:"loggregator_key_path"`
 	DropsondePort int    `json:"dropsonde_port"`
 }
 
