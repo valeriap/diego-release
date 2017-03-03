@@ -1,21 +1,17 @@
 package loggregator_v2_test
 
 import (
-	"crypto/tls"
-	"crypto/x509"
-	"io/ioutil"
-	"net"
+	"time"
 
 	"code.cloudfoundry.org/lager/lagertest"
 	"code.cloudfoundry.org/loggregator_v2"
-	"code.cloudfoundry.org/loggregator_v2/fakes"
 	lfake "github.com/cloudfoundry/dropsonde/log_sender/fake"
 	mfake "github.com/cloudfoundry/dropsonde/metric_sender/fake"
 	"github.com/cloudfoundry/dropsonde/metrics"
 	"github.com/cloudfoundry/sonde-go/events"
 	"github.com/gogo/protobuf/proto"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	"github.com/tedsuo/ifrit"
+	"github.com/tedsuo/ifrit/ginkgomon"
 
 	"github.com/cloudfoundry/dropsonde/logs"
 	. "github.com/onsi/ginkgo"
@@ -77,12 +73,12 @@ var _ = Describe("Client", func() {
 
 	Context("when v2 api is enabled", func() {
 		var (
-			server       *grpc.Server
-			senderServer *fakes.FakeIngressServer
-			receivers    chan loggregator_v2.Ingress_SenderServer
+			receivers   chan loggregator_v2.Ingress_SenderServer
+			grpcRunner  *GrpcRunner
+			grpcProcess ifrit.Process
 		)
 
-		FContext("the cert or key path are invalid", func() {
+		Context("the cert or key path are invalid", func() {
 			BeforeEach(func() {
 				config.CertPath = "/some/invalid/path"
 			})
@@ -92,7 +88,7 @@ var _ = Describe("Client", func() {
 			})
 		})
 
-		FContext("the ca cert path is invalid", func() {
+		Context("the ca cert path is invalid", func() {
 			BeforeEach(func() {
 				config.CACertPath = "/some/invalid/path"
 			})
@@ -102,7 +98,7 @@ var _ = Describe("Client", func() {
 			})
 		})
 
-		FContext("the ca cert is invalid", func() {
+		Context("the ca cert is invalid", func() {
 			BeforeEach(func() {
 				config.CACertPath = "fixtures/invalid-ca.crt"
 			})
@@ -112,54 +108,38 @@ var _ = Describe("Client", func() {
 			})
 		})
 
-		FContext("cannot connecto to the server", func() {
+		Context("cannot connecto to the server", func() {
 			BeforeEach(func() {
 				config.APIPort = 1234
 			})
 
 			It("returns an error", func() {
-				Expect(clientErr).To(HaveOccurred(), "client didn't return an error")
+				Expect(client.SendAppLog("app-id", "message", "source-type", "source-instance")).NotTo(Succeed())
 			})
 		})
 
 		BeforeEach(func() {
-			cert, err := tls.LoadX509KeyPair("fixtures/metron.crt", "fixtures/metron.key")
+			var err error
+			grpcRunner, err = NewGRPCRunner("fixtures/metron.crt", "fixtures/metron.key", "fixtures/CA.crt")
 			Expect(err).NotTo(HaveOccurred())
-			tlsConfig := &tls.Config{
-				Certificates:       []tls.Certificate{cert},
-				ClientAuth:         tls.RequestClientCert,
-				InsecureSkipVerify: false,
-			}
-			caCertBytes, err := ioutil.ReadFile("fixtures/CA.crt")
-			Expect(err).NotTo(HaveOccurred())
-			caCertPool := x509.NewCertPool()
-			Expect(err).NotTo(HaveOccurred())
-			caCertPool.AppendCertsFromPEM(caCertBytes)
-			tlsConfig.RootCAs = caCertPool
-			server = grpc.NewServer(grpc.Creds(credentials.NewTLS(tlsConfig)))
-			listener, err := net.Listen("tcp4", "localhost:0")
-			Expect(err).NotTo(HaveOccurred())
-			senderServer = &fakes.FakeIngressServer{}
-			receivers = make(chan loggregator_v2.Ingress_SenderServer)
-			senderServer.SenderStub = func(recv loggregator_v2.Ingress_SenderServer) error {
-				receivers <- recv
-				return nil
-			}
-			loggregator_v2.RegisterIngressServer(server, senderServer)
-			go server.Serve(listener)
-			port := listener.Addr().(*net.TCPAddr).Port
-			Expect(err).NotTo(HaveOccurred())
+			grpcProcess = ginkgomon.Invoke(grpcRunner)
+
 			config = loggregator_v2.MetronConfig{
 				UseV2API:   true,
-				APIPort:    port,
+				APIPort:    grpcRunner.Port(),
 				CACertPath: "fixtures/CA.crt",
 				CertPath:   "fixtures/client.crt",
 				KeyPath:    "fixtures/client.key",
 			}
+			receivers = grpcRunner.Receivers()
 		})
 
 		AfterEach(func() {
-			server.GracefulStop()
+			ginkgomon.Interrupt(grpcProcess)
+		})
+
+		It("does not return an error", func() {
+			Expect(clientErr).NotTo(HaveOccurred())
 		})
 
 		It("sends app logs", func() {
@@ -170,6 +150,8 @@ var _ = Describe("Client", func() {
 			Eventually(receivers).Should(Receive(&recv))
 			env, err := recv.Recv()
 			Expect(err).NotTo(HaveOccurred())
+			ts := time.Unix(0, env.GetTimestamp())
+			Expect(ts).Should(BeTemporally("~", time.Now(), time.Second))
 			log := env.GetLog()
 			Expect(log).NotTo(BeNil())
 			Expect(log.GetPayload()).To(Equal([]byte("message")))
@@ -177,7 +159,6 @@ var _ = Describe("Client", func() {
 		})
 
 		It("sends app error logs", func() {
-			// TODO: why do we need this ?
 			Consistently(func() error {
 				return client.SendAppErrorLog("app-id", "message", "source-type", "source-instance")
 			}).Should(Succeed())
@@ -185,6 +166,8 @@ var _ = Describe("Client", func() {
 			Eventually(receivers).Should(Receive(&recv))
 			env, err := recv.Recv()
 			Expect(err).NotTo(HaveOccurred())
+			ts := time.Unix(0, env.GetTimestamp())
+			Expect(ts).Should(BeTemporally("~", time.Now(), time.Second))
 			log := env.GetLog()
 			Expect(log).NotTo(BeNil())
 			Expect(log.GetPayload()).To(Equal([]byte("message")))
@@ -199,7 +182,7 @@ var _ = Describe("Client", func() {
 				DiskBytes:        proto.Uint64(10),
 				MemoryBytesQuota: proto.Uint64(20),
 				DiskBytesQuota:   proto.Uint64(20),
-				InstanceIndex:    proto.Int32(0),
+				InstanceIndex:    proto.Int32(5),
 			}
 			Consistently(func() error {
 				return client.SendAppMetrics(&metric)
@@ -208,22 +191,35 @@ var _ = Describe("Client", func() {
 			Eventually(receivers).Should(Receive(&recv))
 			env, err := recv.Recv()
 			Expect(err).NotTo(HaveOccurred())
+			ts := time.Unix(0, env.GetTimestamp())
+			Expect(ts).Should(BeTemporally("~", time.Now(), time.Second))
 			metrics := env.GetGauge()
 			Expect(metrics).NotTo(BeNil())
-			Expect(metrics.GetMetrics()).NotTo(BeNil())
 			Expect(env.GetSourceId()).To(Equal("app-id"))
+			Expect(metrics.GetMetrics()).To(HaveLen(6))
+			Expect(metrics.GetMetrics()["instance_index"].GetValue()).To(Equal(5.0))
 			Expect(metrics.GetMetrics()["cpu"].GetValue()).To(Equal(10.0))
-			Expect(metrics.GetMetrics()["cpu"].GetUnit()).To(Equal("nano")) // TODO: what should this be ?
 			Expect(metrics.GetMetrics()["memory"].GetValue()).To(Equal(10.0))
-			Expect(metrics.GetMetrics()["memory"].GetUnit()).To(Equal("bytes"))
 			Expect(metrics.GetMetrics()["disk"].GetValue()).To(Equal(10.0))
-			Expect(metrics.GetMetrics()["disk"].GetUnit()).To(Equal("bytes"))
-			Expect(metrics.GetMetrics()["memory_quota"].GetValue()).To(Equal(10.0))
-			Expect(metrics.GetMetrics()["memory_quota"].GetUnit()).To(Equal("bytes"))
-			Expect(metrics.GetMetrics()["disk_quota"].GetValue()).To(Equal(10.0))
-			Expect(metrics.GetMetrics()["disk_quota"].GetUnit()).To(Equal("bytes"))
-			Expect(metrics.GetMetrics()["index"].GetValue()).To(Equal(10.0))
-			Expect(metrics.GetMetrics()["index"].GetUnit()).To(Equal("index"))
+			Expect(metrics.GetMetrics()["memory_quota"].GetValue()).To(Equal(20.0))
+			Expect(metrics.GetMetrics()["disk_quota"].GetValue()).To(Equal(20.0))
+		})
+
+		Context("when the server goes away and comes back", func() {
+			JustBeforeEach(func() {
+				Expect(client.SendAppErrorLog("app-id", "message", "source-type", "source-instance")).To(Succeed())
+				ginkgomon.Interrupt(grpcProcess)
+
+				// wait for the client to detect the error
+				Eventually(client.SendAppErrorLog("app-id", "message", "source-type", "source-instance")).ShouldNot(Succeed())
+				grpcProcess = ginkgomon.Invoke(grpcRunner)
+			})
+
+			It("should reconnect", func() {
+				Eventually(func() error {
+					return client.SendAppErrorLog("app-id", "message", "source-type", "source-instance")
+				}).Should(Succeed())
+			})
 		})
 	})
 })

@@ -1,7 +1,6 @@
 package loggregator_v2
 
 import (
-	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"errors"
@@ -16,7 +15,9 @@ import (
 )
 
 //go:generate bash -c "protoc ../loggregator-api/v2/*.proto --go_out=plugins=grpc:. --proto_path=../loggregator-api/v2"
+
 //go:generate counterfeiter -o fakes/fake_client.go . Client
+
 type Client interface {
 	SendAppLog(appID, message, sourceType, sourceInstance string) error
 	SendAppErrorLog(appID, message, sourceType, sourceInstance string) error
@@ -59,16 +60,19 @@ func NewClient(logger lager.Logger, config MetronConfig) (Client, error) {
 		return nil, errors.New("cannot parse ca cert")
 	}
 	tlsConfig.RootCAs = caCertPool
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)))
+
+	connector := func() (IngressClient, error) {
+		conn, err := grpc.Dial(address, grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)))
+		if err != nil {
+			return nil, err
+		}
+
+		return NewIngressClient(conn), nil
+	}
+	ingressClient, err := connector()
 	if err != nil {
-		logger.Error("failed-to-create-grpc-client", err)
 		return nil, err
 	}
-	c := NewIngressClient(conn)
-	sender, err := c.Sender(context.Background())
-	if err != nil {
-		logger.Error("failed-to-create-grpc-sender", err)
-		return nil, err
-	}
-	return &grpcClient{logger.Session("grpc-client"), sender}, nil
+
+	return NewGrpcClient(logger, ingressClient), nil
 }
