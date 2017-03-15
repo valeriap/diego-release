@@ -1,5 +1,5 @@
 check process file_server
-  with pidfile /var/vcap/sys/run/file_server/file_server.pid
-  start program "/var/vcap/jobs/file_server/bin/file_server_ctl start"
-  stop program "/var/vcap/jobs/file_server/bin/file_server_ctl stop"
+  with pidfile /var/vcap/sys/run/crucible/file_server.pid
+  start program "/var/vcap/packages/crucible/bin/crucible start file_server"
+  stop program "/var/vcap/packages/crucible/bin/crucible stop file_server"
   group vcap

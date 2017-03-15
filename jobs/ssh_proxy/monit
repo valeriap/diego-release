@@ -1,6 +1,5 @@
 check process ssh_proxy
-  with pidfile /var/vcap/sys/run/ssh_proxy/ssh_proxy.pid
-  start program "/var/vcap/jobs/ssh_proxy/bin/ssh_proxy_ctl start"
-  stop program "/var/vcap/jobs/ssh_proxy/bin/ssh_proxy_ctl stop"
+  with pidfile /var/vcap/sys/run/crucible/ssh_proxy.pid
+  start program "/var/vcap/packages/crucible/bin/crucible start ssh_proxy"
+  stop program "/var/vcap/packages/crucible/bin/crucible stop ssh_proxy"
   group vcap
-
