@@ -1,5 +1,5 @@
 check process bbs
-  with pidfile /var/vcap/sys/run/bbs/bbs.pid
-  start program "/var/vcap/jobs/bbs/bin/bbs_ctl start"
-  stop program "/var/vcap/jobs/bbs/bin/bbs_ctl stop"
+  with pidfile /var/vcap/sys/run/crucible/bbs.pid
+  start program "/var/vcap/packages/crucible/bin/crucible start bbs"
+  stop program "/var/vcap/packages/crucible/bin/crucible stop bbs"
   group vcap

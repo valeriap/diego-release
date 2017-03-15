@@ -106,18 +106,6 @@ resource_pools:
     network: diego3
     stemcell: (( iaas_settings.stemcell ))
     cloud_properties: (( iaas_settings.resource_pool_cloud_properties.route_emitter_z3.cloud_properties || empty_hash ))
-  - name: colocated_z1
-    network: diego1
-    stemcell: (( iaas_settings.stemcell ))
-    cloud_properties: (( iaas_settings.resource_pool_cloud_properties.colocated_z1.cloud_properties ))
-  - name: colocated_z2
-    network: diego2
-    stemcell: (( iaas_settings.stemcell ))
-    cloud_properties: (( iaas_settings.resource_pool_cloud_properties.colocated_z2.cloud_properties || empty_hash ))
-  - name: colocated_z3
-    network: diego3
-    stemcell: (( iaas_settings.stemcell ))
-    cloud_properties: (( iaas_settings.resource_pool_cloud_properties.colocated_z3.cloud_properties || empty_hash ))
 
 jobs: (( cf_networking_overrides.jobs base.jobs ))
 
@@ -398,60 +386,6 @@ base:
         serial: false
         max_in_flight: (( instance_count_overrides.access_z3.max_in_flight || 1))
       properties:
-        metron_agent:
-          zone: z3
-
-    - name: colocated_z1
-      templates: (( base_job_templates.colocated bbs_overrides.job_templates ))
-      instances: (( instance_count_overrides.colocated_z1.instances || 0 ))
-      persistent_disk_pool: database_disks
-      resource_pool: colocated_z1
-      networks:
-        - name: diego1
-      update:
-        serial: true
-        max_in_flight: 1
-      properties:
-        consul: (( bbs_overrides.job_properties.consul ))
-        diego:
-          rep:
-            zone: z1
-        metron_agent:
-          zone: z1
-
-    - name: colocated_z2
-      templates: (( base_job_templates.colocated bbs_overrides.job_templates ))
-      instances: (( instance_count_overrides.colocated_z2.instances || 0 ))
-      persistent_disk_pool: database_disks
-      resource_pool: colocated_z2
-      networks:
-        - name: diego2
-      update:
-        serial: true
-        max_in_flight: 1
-      properties:
-        consul: (( bbs_overrides.job_properties.consul ))
-        diego:
-          rep:
-            zone: z2
-        metron_agent:
-          zone: z2
-
-    - name: colocated_z3
-      templates: (( base_job_templates.colocated bbs_overrides.job_templates ))
-      instances: (( instance_count_overrides.colocated_z3.instances || 0 ))
-      persistent_disk_pool: database_disks
-      resource_pool: colocated_z3
-      networks:
-        - name: diego3
-      update:
-        serial: true
-        max_in_flight: 1
-      properties:
-        consul: (( bbs_overrides.job_properties.consul ))
-        diego:
-          rep:
-            zone: z3
         metron_agent:
           zone: z3
 
@@ -817,12 +751,6 @@ base_etcd_properties:
         instances: (( instance_count_overrides.database_z2.instances || 1 ))
       - name: "database_z3"
         instances: (( instance_count_overrides.database_z3.instances || 1 ))
-      - name: "colocated_z1"
-        instances: (( instance_count_overrides.colocated_z1.instances || 0 ))
-      - name: "colocated_z2"
-        instances: (( instance_count_overrides.colocated_z2.instances || 0 ))
-      - name: "colocated_z2"
-        instances: (( instance_count_overrides.colocated_z2.instances || 0 ))
     require_ssl: (( property_overrides.etcd.require_ssl || nil ))
     ca_cert: (( property_overrides.etcd.ca_cert || nil ))
     server_cert: (( property_overrides.etcd.server_cert || nil ))
@@ -879,6 +807,8 @@ base_releases:
     version: (( release_versions.diego || "latest" ))
   - name: cflinuxfs2-rootfs
     version: (( release_versions.cflinuxfs2-rootfs || "latest" ))
+  - name: crucible
+    version: (( release_versions.crucible || "latest" ))
 
 release_versions: (( merge || nil ))
 default_bridge_jobs:
@@ -909,6 +839,8 @@ base_job_templates:
       release: diego
     - name: cfdot
       release: diego
+    - name: crucible
+      release: crucible
   brain:
     - name: consul_agent
       consumes: {consul: nil}
@@ -919,6 +851,8 @@ base_job_templates:
       release: cf
     - name: cfdot
       release: diego
+    - name: crucible
+      release: crucible
   cc_bridge: (( merge || default_bridge_jobs ))
   cell:
     - name: consul_agent
@@ -946,6 +880,8 @@ base_job_templates:
       release: cf
     - name: cfdot
       release: diego
+    - name: crucible
+      release: crucible
   route_emitter:
     - name: consul_agent
       consumes: {consul: nil}
@@ -956,26 +892,5 @@ base_job_templates:
       release: cf
     - name: cfdot
       release: diego
-  colocated:
-    - name: rep
-      release: diego
-    - name: auctioneer
-      release: diego
-    - name: cc_uploader
-      release: cf
-    - name: file_server
-      release: diego
-    - name: garden
-      release: (( garden_overrides.job_release || "garden-runc" ))
-    - name: nsync
-      release: cf
-    - name: cflinuxfs2-rootfs-setup
-      release: cflinuxfs2-rootfs
-    - name: route_emitter
-      release: diego
-    - name: ssh_proxy
-      release: diego
-    - name: stager
-      release: cf
-    - name: tps
-      release: cf
+    - name: crucible
+      release: crucible

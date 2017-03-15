@@ -3,12 +3,11 @@ name: route_emitter
 
 templates:
   post-start.erb: bin/post-start
-  route_emitter_ctl.erb: bin/route_emitter_ctl
-  route_emitter_as_vcap.erb: bin/route_emitter_as_vcap
   route_emitter.json.erb: config/route_emitter.json
   bbs_ca.crt.erb: config/certs/bbs/ca.crt
   bbs_client.crt.erb: config/certs/bbs/client.crt
   bbs_client.key.erb: config/certs/bbs/client.key
+  crucible.yml.erb: config/crucible.yml
 
 packages:
   - pid_utils

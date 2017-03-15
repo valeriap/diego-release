@@ -2,10 +2,7 @@
 name: bbs
 
 templates:
-  bbs_ctl.erb: bin/bbs_ctl
-  bbs_as_vcap.erb: bin/bbs_as_vcap
   bbs.json.erb: config/bbs.json
-  drain.erb: bin/drain
   etcd_ca.crt.erb: config/certs/etcd/ca.crt
   etcd_client.crt.erb: config/certs/etcd/client.crt
   etcd_client.key.erb: config/certs/etcd/client.key
@@ -20,6 +17,7 @@ templates:
   auctioneer_ca.crt.erb: config/certs/auctioneer/ca.crt
   auctioneer_client.crt.erb: config/certs/auctioneer/client.crt
   auctioneer_client.key.erb: config/certs/auctioneer/client.key
+  crucible.yml.erb: config/crucible.yml
 
 packages:
   - pid_utils

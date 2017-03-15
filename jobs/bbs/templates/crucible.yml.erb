@@ -1,0 +1,18 @@
+---
+run:
+  path: "/var/vcap/packages/bbs/bin/bbs"
+  args:
+    - "--config"
+    - "/var/vcap/jobs/bbs/config/bbs.json"
+  env:
+  - "GODEBUG=netdns=cgo"
+
+lifecycle:
+  show_stacks_on_stall: true
+
+limits:
+  open_files: 100000
+
+sysctl:
+  net.ipv4.tcp_fin_timeout: 10
+  net.ipv4.tcp_tw_reuse: 1

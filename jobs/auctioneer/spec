@@ -2,8 +2,6 @@
 name: auctioneer
 
 templates:
-  auctioneer_ctl.erb: bin/auctioneer_ctl
-  auctioneer_as_vcap.erb: bin/auctioneer_as_vcap
   auctioneer.json.erb: config/auctioneer.json
   auctioneer_ca.crt.erb: config/certs/auctioneer/ca.crt
   auctioneer_server.crt.erb: config/certs/auctioneer/server.crt
@@ -11,10 +9,10 @@ templates:
   bbs_ca.crt.erb: config/certs/bbs/ca.crt
   bbs_client.crt.erb: config/certs/bbs/client.crt
   bbs_client.key.erb: config/certs/bbs/client.key
-  drain.erb: bin/drain
   rep_ca.crt.erb: config/certs/rep/ca.crt
   rep_client.crt.erb: config/certs/rep/client.crt
   rep_client.key.erb: config/certs/rep/client.key
+  crucible.yml.erb: config/crucible.yml
 
 packages:
   - pid_utils

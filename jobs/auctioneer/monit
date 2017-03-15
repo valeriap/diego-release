@@ -1,5 +1,5 @@
 check process auctioneer
-  with pidfile /var/vcap/sys/run/auctioneer/auctioneer.pid
-  start program "/var/vcap/jobs/auctioneer/bin/auctioneer_ctl start"
-  stop program "/var/vcap/jobs/auctioneer/bin/auctioneer_ctl stop"
+  with pidfile /var/vcap/sys/run/crucible/auctioneer.pid
+  start program "/var/vcap/packages/crucible/bin/crucible start auctioneer"
+  stop program "/var/vcap/packages/crucible/bin/crucible stop auctioneer"
   group vcap

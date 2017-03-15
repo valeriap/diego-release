@@ -12,6 +12,8 @@ bbs_overrides:
     release: cf
   - name: cfdot
     release: diego
+  - name: crucible
+    release: crucible
   etcd_properties: {}
   bbs_properties:
     etcd:

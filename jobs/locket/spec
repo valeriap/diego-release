@@ -2,12 +2,11 @@
 name: locket
 
 templates:
-  locket_ctl.erb: bin/locket_ctl
-  locket_as_vcap.erb: bin/locket_as_vcap
   locket.json.erb: config/locket.json
   locket_ca.crt.erb: config/certs/ca.crt
   locket_server.crt.erb: config/certs/server.crt
   locket_server.key.erb: config/certs/server.key
+  crucible.yml.erb: config/crucible.yml
 
 packages:
   - pid_utils
