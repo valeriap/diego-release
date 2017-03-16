@@ -191,6 +191,8 @@ base:
         serial: false
         max_in_flight: (( instance_count_overrides.cell_z1.max_in_flight || 1 ))
       properties:
+        crucible:
+          skip_cgroups: true
         loggregator: &cell-loggregator
           use_v2_api:  (( property_overrides.loggregator.use_v2_api || nil ))
           v2_api_port: (( config_from_cf.metron_agent.grpc_port || nil ))
@@ -268,6 +270,8 @@ base:
         serial: false
         max_in_flight: (( instance_count_overrides.cell_z2.max_in_flight || 1 ))
       properties:
+        crucible:
+          skip_cgroups: true
         loggregator: *cell-loggregator
         metron_agent:
           zone: z2
@@ -340,6 +344,8 @@ base:
         serial: false
         max_in_flight: (( instance_count_overrides.cell_z3.max_in_flight || 1 ))
       properties:
+        crucible:
+          skip_cgroups: true
         loggregator: *cell-loggregator
         metron_agent:
           zone: z3
