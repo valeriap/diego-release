@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+DATA_DIR=/var/vcap/data/executor
+
+TRUSTED_CERTS_DIR=${DATA_DIR}/trusted_certs
+rm -rf "$TRUSTED_CERTS_DIR"
+<% if_p("diego.rep.trusted_certs") do |value| %>
+  mkdir -p "$TRUSTED_CERTS_DIR"
+  chown -R vcap:vcap $TRUSTED_CERTS_DIR
+
+  # Split files on '----END CERTIFICATE-----' and increment our file counter by 1
+  pushd $TRUSTED_CERTS_DIR
+          awk -v n=1 '
+                  split_after == 1 {n++;split_after=0}
+                  /-----END CERTIFICATE-----/ {split_after=1}
+                  NF {print > "trusted_ca_" n ".crt"}' < $CONF_DIR/certs/rep/trusted_certs.crt
+  popd
+<% end %>

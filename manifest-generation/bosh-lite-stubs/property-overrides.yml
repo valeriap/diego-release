@@ -1,6 +1,6 @@
 property_overrides:
   loggregator:
-    use_v2_api: true
+    use_v2_api: false
     tls:
       cert: |+
         -----BEGIN CERTIFICATE-----

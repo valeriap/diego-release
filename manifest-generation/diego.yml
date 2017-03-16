@@ -868,6 +868,8 @@ base_job_templates:
       release: cf
     - name: cfdot
       release: diego
+    - name: crucible
+      release: crucible
   database:
     - name: consul_agent
       consumes: {consul: nil}

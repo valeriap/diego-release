@@ -58,7 +58,7 @@ if evacuate; then
     echo "$(date): waiting"
   done
 
-  kill_and_wait $PIDFILE
+  /var/vcap/packages/crucible/bin/crucible stop rep
 else
   exit 1
 fi

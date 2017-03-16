@@ -1,0 +1,32 @@
+---
+run:
+  path: "/var/vcap/packages/rep/bin/rep"
+  args:
+    - "--config"
+    - "/var/vcap/jobs/rep/config/rep.json"
+  env:
+  - "GODEBUG=netdns=cgo"
+
+lifecycle:
+  show_stacks_on_stall: true
+
+limits:
+  open_files: 100000
+
+sysctl:
+  net.ipv4.tcp_fin_timeout: 10
+  net.ipv4.tcp_tw_reuse: 1
+  net.netfilter.nf_conntrack_max: 262144
+
+directories:
+- <%= p("diego.executor.volman.driver_paths") %>
+- /var/vcap/data/executor
+
+mounts:
+- type: tmpfs
+  source: /var/vcap/data/executor/instance_identity
+  destination: /var/vcap/data/executor/instance_identity
+  options:
+  - mode=0700
+  - size=25M
+  lifecycle: recreate
