@@ -64,5 +64,17 @@
     config[:cell_id] = spec.id
   end
 
+  config[:enable_tcp_emitter] = p("tcp_emitter.enabled")
+  config[:routing_api] = {}
+  if_p("tcp_emitter.routing_api.uri") do |value|
+    config[:routing_api][:uri] = value
+  end
+  if_p("tcp_emitter.routing_api.port") do |value|
+    config[:routing_api][:port] = value
+  end
+  if_p("tcp_emitter.routing_api.auth_disabled") do |value|
+    config[:routing_api][:auth_disabled] = value
+  end
+
   config.to_json
 %>
